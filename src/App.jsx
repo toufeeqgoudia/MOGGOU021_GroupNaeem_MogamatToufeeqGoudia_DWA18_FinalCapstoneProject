@@ -1,12 +1,14 @@
-import './App.css'
+// import './App.css';
+import TopNav from "./Components/Nav/TopNav";
+import BottomNav from "./Components/Nav/BottomNav";
 
 function App() {
-
   return (
     <>
-      Hello World
+      <TopNav />
+      <BottomNav />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
