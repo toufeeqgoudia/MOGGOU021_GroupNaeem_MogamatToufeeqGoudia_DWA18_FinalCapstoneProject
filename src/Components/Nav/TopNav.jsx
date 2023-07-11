@@ -9,9 +9,7 @@ export default function TopNav() {
     return (
         <nav className="nav-container">
             <div className="left-container">
-                <Button className="">
-                    <img src="/PodHub-nav-logo.png" alt="PodHub Logo" className="logo-img" />
-                </Button>
+                <img src="/PodHub-nav-logo.png" alt="PodHub Logo" className="logo-img" />
             </div>
             <div className="right-container">
                 <Button>
