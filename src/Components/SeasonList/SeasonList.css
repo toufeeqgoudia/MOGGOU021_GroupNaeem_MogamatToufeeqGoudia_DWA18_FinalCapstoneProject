@@ -23,6 +23,14 @@
   padding-bottom: 3px;
 }
 
+.dsp-input {
+  font-size: 10px;
+}
+
+.dsp-select {
+  height: 20px;
+}
+
 .dsp-text {
   font-size: 13px;
   padding-left: 5px;

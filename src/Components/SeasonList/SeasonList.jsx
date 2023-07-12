@@ -35,7 +35,6 @@ export default function SeasonList({ show, isOpen, onClose }) {
         </Button>
         <img src={show.image} alt={show.title} className="dsp-img" />
         <h3 className="dsp-title">{show.title}</h3>
-        {/* TURN GENRE INTO DROPDOWN FOR USER TO 'Select Season' */}
         <p className="dsp-text">
           {show.genres} Season
           {show.genres <= 1 ? '' : 's'}
@@ -59,7 +58,7 @@ export default function SeasonList({ show, isOpen, onClose }) {
           {show.description}
         </p>
         {showMoreButton && (
-          <Button onClick={() => setIsDescOpen(!isDescOpen)}>
+          <Button variant="text" size='small' onClick={() => setIsDescOpen(!isDescOpen)}>
             {isDescOpen ? 'read less...' : 'read more...'}
           </Button>
         )}
