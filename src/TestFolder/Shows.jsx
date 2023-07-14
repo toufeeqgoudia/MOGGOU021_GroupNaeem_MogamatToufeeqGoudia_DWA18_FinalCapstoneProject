@@ -1,22 +1,13 @@
-How can I go from `ShowList.jsx` component to `EpisodeList.jsx` using the id of `ShowList.jsx` Endpoint?
+import { fetchShows } from './CreateApi';
+import { genreMapping } from '../Utils/genreMapping';
+import './Shows.css';
+import { useState, useEffect } from 'react';
+import Seasons from './Seasons';
 
 export default function ShowList() {
   const [shows, setShows] = useState([]);
   const [selectedShowId, setSelectedShowId] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-
-export const fetchShows = async () => {
-    try {
-        const response = await fetch('https://podcast-api.netlify.app/shows')
-        if (!response.ok) {
-            throw new Error('Error fetching shows')
-        }
-        return await response.json()
-    } catch (error) {
-        console.log('Error fetching shows: ', error)
-        throw error
-    }
-}
 
   useEffect(() => {
     fetchShows()
@@ -56,12 +47,18 @@ export const fetchShows = async () => {
               {show.genres.map((genreId) => genreMapping[genreId]).join(', ')}
             </p>
             <p className="show-text">
-              Last Updated: {new Date(show.updated).toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})}
+              Last Updated:{' '}
+              {new Date(show.updated).toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
             </p>
           </div>
         ))}
       </div>
-      <SeasonList
+      <Seasons
+        showsData={shows}
         show={shows.find((show) => show.id === selectedShowId)}
         isOpen={dialogOpen}
         onClose={handleDialog}
@@ -69,6 +66,3 @@ export const fetchShows = async () => {
     </>
   );
 }
-
-
-Endpoint for `EpisodeList.jsx` is `https://podcast-api.netlify.app/id/${id of shows in first end point}`

@@ -13,9 +13,28 @@ const descStyles = {
 };
 
 export default function SeasonList({ show, isOpen, onClose }) {
+  const [episodes, setEpisodes] = useState([]);
   const [isDescOpen, setIsDescOpen] = useState(false);
   const [showMoreButton, setShowMoreButton] = useState(false);
-  const ref = useRef(null);
+  const ref = useRef(null); 
+  
+  useEffect(() => {
+    const fetchEpisodes = async (showId) => {
+      try {
+        const response = await fetch(`https://podcast-api.netlify.app/id/${showId}`);
+        if (!response.ok) {
+          throw new Error('Error fetching episodes');
+        }
+        const data = await response.json();
+        setEpisodes(data);
+        console.log(`data: `, data)
+      } catch (error) {
+        console.log('Error fetching episodes: ', error);
+      }
+    };
+
+    fetchEpisodes();
+  }, []);
 
   useEffect(() => {
     if (ref.current) {
@@ -28,17 +47,19 @@ export default function SeasonList({ show, isOpen, onClose }) {
   }
 
   return (
+    <>
     <Dialog open={isOpen} onClose={onClose}>
       <div className="dsp-overlay">
         <Button onClick={onClose} className="dsc-close">
           <CloseIcon />
         </Button>
         <img src={show.image} alt={show.title} className="dsp-img" />
-        <h3 className="dsp-title">{show.title}</h3>
-        <p className="dsp-text">
-          {show.genres} Season
-          {show.genres <= 1 ? '' : 's'}
-        </p>
+        <h3 className="dsp-title">{show.title} ID:{show.id}</h3>
+
+          <select key={show.id}>
+            <option value=''>{episodes.id}</option>
+          </select>
+
         <p className="dsp-text">
           {show.genres.map((genreId) => genreMapping[genreId]).join(', ')}
         </p>
@@ -64,6 +85,7 @@ export default function SeasonList({ show, isOpen, onClose }) {
         )}
       </div>
     </Dialog>
+    </>
   );
 }
 
@@ -72,3 +94,23 @@ SeasonList.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
+
+
+
+  // useEffect(() => {
+  //   const fetchEpisodes = async () => {
+  //     try {
+  //       const response = await fetch(`https://podcast-api.netlify.app/id/10716`);
+  //       if (!response.ok) {
+  //         throw new Error('Error fetching episodes');
+  //       }
+  //       const data = await response.json();
+  //       setEpisodes(data);
+  //       console.log(`data: `, data)
+  //     } catch (error) {
+  //       console.log('Error fetching episodes: ', error);
+  //     }
+  //   };
+
+  //   fetchEpisodes();
+  // }, []);

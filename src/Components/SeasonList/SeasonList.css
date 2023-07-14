@@ -1,6 +1,7 @@
 .dsp-overlay {
   width: 300px;
   height: 500px;
+  border-radius: 50px;
 }
 
 /* .dsp-close {

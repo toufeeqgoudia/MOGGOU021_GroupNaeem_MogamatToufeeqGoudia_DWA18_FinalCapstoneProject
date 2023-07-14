@@ -1,4 +1,5 @@
 import ShowList from "../ShowList/ShowList";
+import './DiscoverList.css'
 
 export default function DiscoverList() {
 
@@ -7,7 +8,7 @@ export default function DiscoverList() {
             <h3>You may be interested in:</h3>
             <ul>
                 <li>
-                    {Math.random( <ShowList /> )}
+                    <ShowList />
                 </li>
             </ul>
         </div>

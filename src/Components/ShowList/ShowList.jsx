@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { fetchShows } from '../../Services/api';
 import { genreMapping } from '../../Utils/genreMapping';
-import SeasonList from '../SeasonList/SeasonList';
-import DiscoverList from '../DiscoverList/DiscoverList';
+// import SeasonList from '../SeasonList/SeasonList';
+import TestComponent from '../../TestFolder/Seasons';
 import './ShowList.css';
 
 export default function ShowList() {
@@ -32,7 +32,6 @@ export default function ShowList() {
 
   return (
     <>
-      <DiscoverList />
       <div className="show-container">
         {shows.map((show) => (
           <div
@@ -49,12 +48,24 @@ export default function ShowList() {
               {show.genres.map((genreId) => genreMapping[genreId]).join(', ')}
             </p>
             <p className="show-text">
-              Last Updated: {new Date(show.updated).toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'})}
+              Last Updated:{' '}
+              {new Date(show.updated).toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
             </p>
           </div>
         ))}
       </div>
-      <SeasonList
+      {/* <SeasonList
+        show={shows.find((show) => show.id === selectedShowId)}
+        isOpen={dialogOpen}
+        onClose={handleDialog}
+        // endpoint={`https://podcast-api.netlify.app/id/${selectedShowId}`}
+      /> */}
+
+      <TestComponent
         show={shows.find((show) => show.id === selectedShowId)}
         isOpen={dialogOpen}
         onClose={handleDialog}
