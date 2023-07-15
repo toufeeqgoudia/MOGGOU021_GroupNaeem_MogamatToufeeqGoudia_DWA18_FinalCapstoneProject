@@ -1,4 +1,4 @@
-// import { Route, Router } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import TopNav from './Components/Nav/TopNav';
 import BottomNav from "./Components/Nav/BottomNav";
 import Shows from './TestFolder/Shows';
@@ -11,7 +11,9 @@ function App() {
   return (
     <>
       <TopNav />
-      <Shows />
+      <Routes>
+        <Route path="/" element={<Shows />} />
+      </Routes>
       <BottomNav />
     </>
   );

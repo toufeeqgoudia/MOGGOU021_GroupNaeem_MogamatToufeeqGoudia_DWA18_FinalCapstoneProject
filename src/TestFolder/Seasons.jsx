@@ -1,7 +1,14 @@
 import { useEffect, useState, useRef } from 'react';
-// import { fetchShows, fetchEpisodes } from './CreateApi';
+// import { Link, useParams } from 'react-router-dom';
 import { genreMapping } from '../Utils/genreMapping';
-import { Button, Dialog } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 import './Seasons.css';
@@ -13,44 +20,47 @@ const descStyles = {
   display: '-webkit-box',
 };
 
-export default function Seasons({ showsData, show, isOpen, onClose }) {
-  const [episodes, setEpisodes] = useState(null);
+export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
+  const [showDetails, setShowDetails] = useState({ seasons: [] });
   const [isDescOpen, setIsDescOpen] = useState(false);
   const [showMoreButton, setShowMoreButton] = useState(false);
   const ref = useRef(null);
-  const [showId, setShowId] = useState(null)
-
-  // IF showsData.map(data => data.id) === show 
-  // THEN setShowId to that id
-
-  console.log('showsData: ', showsData.map(data => data.id))
+  const [seasonSelect, setSeasonSelect] = useState('');
 
   useEffect(() => {
-    const fetchEpisodes = async () => {
-      try {
-        const response = await fetch(
-          `https://podcast-api.netlify.app/id/${showId}`
-        );
-        if (!response.ok) {
-          throw new Error('Error fetching episodes');
+    if (selectedShowId) {
+      const fetchEpisodes = async () => {
+        try {
+          const response = await fetch(
+            `https://podcast-api.netlify.app/id/${selectedShowId}`
+          );
+          if (!response.ok) {
+            throw new Error('Something went wrong. Try again later.');
+          }
+          const data = await response.json();
+          setShowDetails(data);
+        } catch (error) {
+          console.error(error);
         }
-        const data = await response.json();
-        setEpisodes(data);
-      } catch (error) {
-        console.log('Error fetching episodes: ', error);
-        throw error;
-      }
-    };
-    fetchEpisodes();
-  }, [showId]);
-
-  console.log('episodes: ', episodes);
+      };
+      fetchEpisodes();
+    }
+  }, [selectedShowId]);
 
   useEffect(() => {
     if (ref.current) {
       setShowMoreButton(ref.current.scrollHeight !== ref.current.clientHeight);
     }
   }, []);
+
+  function handleSeasonSelect(event) {
+    setSeasonSelect(event.target.value);
+  }
+
+  function handleClose() {
+    // FIX SETTING THE SELECT VALUE TO '' AFTER CLOSING DIALOG
+    setSeasonSelect('')
+  }
 
   if (!show) {
     return <div>Loading...</div>;
@@ -60,19 +70,31 @@ export default function Seasons({ showsData, show, isOpen, onClose }) {
     <>
       <Dialog open={isOpen} onClose={onClose}>
         <div className="dsp-overlay">
-          <Button onClick={onClose} className="dsc-close">
+          <Button onClick={handleClose} className="dsc-close">
             <CloseIcon />
           </Button>
           <img src={show.image} alt={show.title} className="dsp-img" />
-          <h3 className="dsp-title">
-            {show.title} ID:{show.id}
-          </h3>
+          <h3 className="dsp-title">{show.title}</h3>
 
-          <select>
-            {episodes.seasons.map((season) => (
-              <option key={show.id}>Season {season.season}</option>
-            ))}
-          </select>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel>Select Season</InputLabel>
+            <Select
+              label="Select Season"
+              value={seasonSelect}
+              onChange={handleSeasonSelect}
+            >
+              {showDetails.seasons.length > 0 &&
+                showDetails.seasons.map((season) => (
+                  <MenuItem
+                    key={season.season}
+                    className="dsp-option"
+                    value={season.season}
+                  >
+                    {season.title}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
 
           <p className="dsp-text">
             {show.genres.map((genreId) => genreMapping[genreId]).join(', ')}
@@ -108,33 +130,8 @@ export default function Seasons({ showsData, show, isOpen, onClose }) {
 }
 
 Seasons.propTypes = {
-  showsData: PropTypes.array,
   show: PropTypes.object,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  selectedShowId: PropTypes.string,
 };
-
-// useEffect(() => {
-//   const fetchEpisodes = async () => {
-//     try {
-//       const showResponse = await fetch(
-//         'https://podcast-api.netlify.app/shows'
-//       );
-//       const showData = await showResponse.json();
-
-//       const fetchedEpisodesData = [];
-//       for (const shows of showData) {
-//         const url = `https://podcast-api.netlify.app/id/${shows.id}`;
-//         const episodeResponse = await fetch(url);
-//         const episodeData = await episodeResponse.json();
-//         fetchedEpisodesData.push(episodeData);
-//       }
-
-//       setEpisodes(fetchedEpisodesData);
-//     } catch (error) {
-//       console.error('Error fetching data:', error);
-//     }
-//   };
-
-//   fetchEpisodes();
-// }, []);

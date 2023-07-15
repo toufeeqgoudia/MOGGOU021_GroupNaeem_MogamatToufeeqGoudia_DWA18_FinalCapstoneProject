@@ -1,15 +1,44 @@
-export const fetchShows = async () => {
-  try {
-    const response = await fetch('https://podcast-api.netlify.app/shows');
-    if (!response.ok) {
-      throw new Error('Error fetching shows');
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log('Error fetching shows: ', error);
-  }
+const fetchShows = async () => {
+  const result = fetch('https://podcast-api.netlify.app')
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Something went wrong. Try again later.')
+      }
+      return response
+    })
+    .then((response) => response.json())
+    .catch((error) => {
+      console.error(error)
+      return error
+    })
+    return result
 };
+
+// const fetchEpisodes = async (selectedShowId) => {
+//   const result = fetch( `https://podcast-api.netlify.app/id/${selectedShowId}`)
+//     .then((response) => {
+//       if (!response.ok) {
+//         throw new Error('Something went wrong. Try again later.')
+//       }
+//       return response
+//     })
+//     .then((response) => response.json())
+//     .catch((error) => {
+//       console.error(error)
+//       return error
+//     })
+//     return result
+// }
+
+const createApi = () => {
+  return {
+    fetchShows, 
+  }
+}
+
+export { fetchShows, createApi }
+
+
 
 // export const fetchEpisodes = async (showId) => {
 //     try {
