@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-// import { Link, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { genreMapping } from '../../Utils/genreMapping';
 import {
   Button,
@@ -26,6 +26,7 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
   const [showMoreButton, setShowMoreButton] = useState(false);
   const ref = useRef(null);
   const [seasonSelect, setSeasonSelect] = useState('');
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (selectedShowId) {
@@ -55,11 +56,13 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
 
   function handleSeasonSelect(event) {
     setSeasonSelect(event.target.value);
+    navigate(`/episodes/${selectedShowId}/${seasonSelect}`, {state: showDetails})
   }
 
   function handleClose() {
-    // FIX SETTING THE SELECT VALUE TO '' AFTER CLOSING DIALOG
     setSeasonSelect('');
+    onClose();
+    setIsDescOpen(false);
   }
 
   if (!show) {
@@ -68,7 +71,7 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
 
   return (
     <>
-      <Dialog open={isOpen} onClose={onClose}>
+      <Dialog open={isOpen} onClose={handleClose}>
         <div className="dsp-overlay">
           <Button onClick={handleClose} className="dsc-close">
             <CloseIcon />
@@ -76,9 +79,13 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
           <img src={show.image} alt={show.title} className="dsp-img" />
           <h3 className="dsp-title">{show.title}</h3>
 
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel>Select Season</InputLabel>
+          <FormControl sx={{ m: 1, width: 150 }} size="small">
+            <InputLabel sx={{ fontSize: 13 }}>
+              Select Season
+            </InputLabel>
             <Select
+              sx={{ height: 25, fontSize: 13 }}
+              size="small"
               label="Select Season"
               value={seasonSelect}
               onChange={handleSeasonSelect}
@@ -86,8 +93,8 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
               {showDetails.seasons.length > 0 &&
                 showDetails.seasons.map((season) => (
                   <MenuItem
+                    sx={{ fontSize: 13 }}
                     key={season.season}
-                    className="dsp-option"
                     value={season.season}
                   >
                     {season.title}
@@ -107,22 +114,24 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
               year: 'numeric',
             })}
           </p>
-          <p
-            style={isDescOpen ? null : descStyles}
-            ref={ref}
-            className="dsp-desc"
-          >
-            {show.description}
-          </p>
-          {showMoreButton && (
-            <Button
-              variant="text"
-              size="small"
-              onClick={() => setIsDescOpen(!isDescOpen)}
+          <div>
+            <p
+              style={isDescOpen ? null : descStyles}
+              ref={ref}
+              className="dsp-desc"
             >
-              {isDescOpen ? 'read less...' : 'read more...'}
-            </Button>
-          )}
+              {show.description}
+            </p>
+            {showMoreButton && (
+              <Button
+                variant="text"
+                size="small"
+                onClick={() => setIsDescOpen(!isDescOpen)}
+              >
+                {isDescOpen ? 'read less...' : 'read more...'}
+              </Button>
+            )}
+          </div>
         </div>
       </Dialog>
     </>

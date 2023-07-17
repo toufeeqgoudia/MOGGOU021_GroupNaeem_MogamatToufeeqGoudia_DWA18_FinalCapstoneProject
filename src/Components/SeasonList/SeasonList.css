@@ -5,11 +5,10 @@
 }
 
 .dsp-close {
-      
-      top: 10px;
-      right: 10px;
-      z-index: 10;
-  }
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
 
 .dsp-img {
   width: 100%;
@@ -22,30 +21,6 @@
   padding-right: 5px;
   padding-top: 3px;
   padding-bottom: 3px;
-}
-
-.dsp-select {
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 3px;
-  padding-bottom: 10px;
-  width: 200px;
-  height: 90px;
-}
-
-.dsp-option {
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-}
-
-.dsp-input {
-  font-size: 10px;
-}
-
-.dsp-select {
-  height: 20px;
 }
 
 .dsp-text {

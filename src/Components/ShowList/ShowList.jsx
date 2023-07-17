@@ -30,7 +30,7 @@ export default function ShowList() {
   }
 
   if (!shows) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   return (

@@ -1,11 +1,12 @@
 import ShowList from '../../Components/ShowList/ShowList';
 import SeasonList from '../../Components/SeasonList/SeasonList';
+// import EpisodeList from '../../Components/EpisodeList/EpisodeList'
 
 export default function Home() {
   return (
     <>
-      <ShowList path='/shows' />
-      <SeasonList path='/seasons' />
+      <ShowList path='/' />
+      <SeasonList path='/' />
     </>
   );
 }
