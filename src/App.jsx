@@ -12,7 +12,7 @@ function App() {
       <TopNav />
       <Routes>
         <Route path="/" element={<ShowList />} />
-        <Route path="/episodes/:showId" element={<EpisodeList />} />
+        <Route path="/:showId/episodes" element={<EpisodeList />} />
       </Routes>
       <BottomNav />
     </>

@@ -8,7 +8,7 @@
 }
 
 .epi-container {
-  width: 350px;
+  min-width: 350px;
   height: 150px;
   background-color: grey; /* CHANGE COLOUR LATER */
 }

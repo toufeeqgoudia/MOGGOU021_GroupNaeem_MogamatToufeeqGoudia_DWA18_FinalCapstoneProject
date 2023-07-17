@@ -56,7 +56,7 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
 
   function handleSeasonSelect(event) {
     setSeasonSelect(event.target.value);
-    navigate(`/episodes/${selectedShowId}/${seasonSelect}`, {state: showDetails})
+    navigate(`/${selectedShowId}/episodes`, {state: showDetails})
   }
 
   function handleClose() {
