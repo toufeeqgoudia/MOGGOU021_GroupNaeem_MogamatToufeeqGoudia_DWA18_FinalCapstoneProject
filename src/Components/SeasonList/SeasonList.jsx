@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
-import './SeasonList.css';
 
 const descStyles = {
   WebkitLineClamp: 5,
@@ -24,9 +23,9 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
   const [showDetails, setShowDetails] = useState({ seasons: [] });
   const [isDescOpen, setIsDescOpen] = useState(false);
   const [showMoreButton, setShowMoreButton] = useState(false);
-  const ref = useRef(null);
+  const moreRef = useRef(null);
   const [seasonSelect, setSeasonSelect] = useState('');
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (selectedShowId) {
@@ -49,14 +48,14 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
   }, [selectedShowId]);
 
   useEffect(() => {
-    if (ref.current) {
-      setShowMoreButton(ref.current.scrollHeight !== ref.current.clientHeight);
+    if (moreRef.current) {
+      setShowMoreButton(moreRef.current.scrollHeight !== moreRef.current.clientHeight);
     }
   }, []);
 
   function handleSeasonSelect(event) {
     setSeasonSelect(event.target.value);
-    navigate(`/${selectedShowId}/episodes`, {state: showDetails})
+    navigate(`/${selectedShowId}/episodes`, { state: showDetails });
   }
 
   function handleClose() {
@@ -72,17 +71,15 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
   return (
     <>
       <Dialog open={isOpen} onClose={handleClose}>
-        <div className="dsp-overlay">
-          <Button onClick={handleClose} className="dsc-close">
+        <div className="w-72 h-144">
+          <Button onClick={handleClose} className="z-10">
             <CloseIcon />
           </Button>
-          <img src={show.image} alt={show.title} className="dsp-img" />
-          <h3 className="dsp-title">{show.title}</h3>
+          <img src={show.image} alt={show.title} className="w-full h-52" />
+          <h3 className="text-sm px-1.5 py-1 font-bold">{show.title}</h3>
 
           <FormControl sx={{ m: 1, width: 150 }} size="small">
-            <InputLabel sx={{ fontSize: 13 }}>
-              Select Season
-            </InputLabel>
+            <InputLabel sx={{ fontSize: 13 }}>Select Season</InputLabel>
             <Select
               sx={{ height: 25, fontSize: 13 }}
               size="small"
@@ -103,10 +100,10 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
             </Select>
           </FormControl>
 
-          <p className="dsp-text">
+          <p className="text-xs px-1.5 pb-1">
             {show.genres.map((genreId) => genreMapping[genreId]).join(', ')}
           </p>
-          <p className="dsp-text">
+          <p className="text-xs px-1.5 pb-1">
             Last Updated:{' '}
             {new Date(show.updated).toLocaleDateString('en-GB', {
               day: 'numeric',
@@ -117,8 +114,8 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
           <div>
             <p
               style={isDescOpen ? null : descStyles}
-              ref={ref}
-              className="dsp-desc"
+              ref={moreRef}
+              className="text-xs px-1.5 pb-1"
             >
               {show.description}
             </p>
