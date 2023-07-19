@@ -11,7 +11,11 @@ export default {
       },
       height: {
         '144': '32rem'
-      }
+      },
+      boxShadow: {
+        'tn' : '0 2px 5px #696969',
+        'bn' : '0 0 10px #696969',
+      },
     },
   },
   plugins: [],

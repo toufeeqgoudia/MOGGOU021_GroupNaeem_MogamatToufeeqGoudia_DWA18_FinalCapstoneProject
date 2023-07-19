@@ -1,22 +1,21 @@
 import { Button } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import './Nav.css'
 
 export default function TopNav() {
 
 
     return (
-        <nav className="nav-container">
-            <div className="left-container">
-                <img src="/PodHub-nav-logo.png" alt="PodHub Logo" className="logo-img" />
+        <nav className="fixed -top-0 -right-0 -left-0 flex justify-between items-center bg-white shadow-tn">
+            <div className="flex items-center">
+                <img src="/PodHub-nav-logo.png" alt="PodHub Logo" className="w-24 h-12 rounded-xl pt-0.5 pb-1 pl-1" />
             </div>
-            <div className="right-container">
+            <div className="m-0">
                 <Button>
-                    <SearchIcon className="nav-icon" />
+                    <SearchIcon className="text-xl" />
                 </Button>
                 <Button>
-                    <AccountCircleIcon className="nav-icon" />
+                    <AccountCircleIcon className="text-xl" />
                 </Button>
             </div>
         </nav>
