@@ -9,12 +9,12 @@ import EpisodeListComp from './EpisodeListComp';
 export default function EpisodeList() {
   const location = useLocation();
   const showDetails = location.state;
-  const [seasonSelect, setSeasonSelect] = useState('');
+  const [seasonSelected, setSeasonSelected] = useState('');
   const [selectedSeasonDetails, setSelectedSeasonDetails] = useState(null);
 
   function handleSeasonSelect(event) {
     const selectedSeason = event.target.value;
-    setSeasonSelect(selectedSeason);
+    setSeasonSelected(selectedSeason);
 
     const seasonDetails = showDetails.seasons.find(
       (season) => season.season === selectedSeason
@@ -24,8 +24,14 @@ export default function EpisodeList() {
 
   return (
     <div className="my-10">
-      <img src={showDetails.image} alt={showDetails.title} className="w-full" />
-      <h3 className='text-xl px-1.5 py-1 font-bold'>{showDetails.title}</h3>
+      <div className='w-full h-1/3'>
+        <img
+          src={showDetails.image}
+          alt={showDetails.title}
+          className="w-full h-full"
+        />
+      </div>
+      <h3 className="text-xl px-1.5 py-1 font-bold">{showDetails.title}</h3>
 
       <FormControl sx={{ m: 1, width: 150 }} size="small">
         <InputLabel sx={{ fontSize: 13 }}>Select Season</InputLabel>
@@ -33,7 +39,7 @@ export default function EpisodeList() {
           sx={{ height: 25, fontSize: 13 }}
           size="small"
           label="Select Season"
-          value={seasonSelect}
+          value={seasonSelected}
           onChange={handleSeasonSelect}
         >
           {showDetails.seasons.length > 0 &&
@@ -59,9 +65,7 @@ export default function EpisodeList() {
   );
 }
 
-
 /**
  * BUGS TO FIX:
- * 
- * selected season to be the same as season selected in `SeasonList.jsx`
+ * size of image (All views)
  */

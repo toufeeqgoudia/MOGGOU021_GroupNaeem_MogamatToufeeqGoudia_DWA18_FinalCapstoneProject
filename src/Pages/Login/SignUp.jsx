@@ -40,11 +40,7 @@ export default function SignUp(props) {
       });
 
       console.log('data: ', data);
-      console.log('data sesson: ', data.session);
-      console.log('data user: ', data.user);
-      console.log('error: ', error);
-      console.log('error.name: ', error.name);
-      console.log('error.message: ', error.message);
+      console.log('error: ', error)
     } catch {
       setFetchError('Failed to sign in');
     }

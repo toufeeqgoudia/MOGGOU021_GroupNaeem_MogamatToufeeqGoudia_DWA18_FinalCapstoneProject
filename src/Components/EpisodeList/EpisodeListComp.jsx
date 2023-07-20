@@ -7,6 +7,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import PropTypes from 'prop-types';
+import EpisodePopup from './EpisodePopup';
 
 const TinyText = styled(Typography)({
   fontSize: '0.75rem',
@@ -20,6 +21,7 @@ export default function EpisodeListComp({ episode }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [showPopup, setShowPopup] = useState(false)
   const audioRef = useRef(null);
 
   function addToFavourites() {
@@ -28,6 +30,7 @@ export default function EpisodeListComp({ episode }) {
 
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
+    setShowPopup(true)
   };
 
   const handleTimeUpdate = () => {
@@ -49,6 +52,11 @@ export default function EpisodeListComp({ episode }) {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const handlePopupClose = () => {
+    setShowPopup(false)
+    setIsPlaying(false)
+  }
+
   return (
     <div
       key={episode.title}
@@ -56,13 +64,19 @@ export default function EpisodeListComp({ episode }) {
     >
       <h4 className="text-sm px-1.5 py-1 font-bold">{episode.title}</h4>
       <p className="text-xs px-1.5 pb-1">{episode.description}</p>
-      <Button>
+      
         {addFavourites ? (
-          <StarIcon onClick={addToFavourites} />
+          <Button variant='text' size='small' onClick={addToFavourites}>
+            <StarIcon />
+            Remove from favourites
+          </Button>
         ) : (
-          <StarBorderIcon onClick={addToFavourites} />
+          <Button variant='text' size='small' onClick={addToFavourites}>
+            <StarBorderIcon />
+            Add to favourites
+          </Button>
         )}
-      </Button>
+      
       <div className="flex flex-row content-center items-center">
         <Button onClick={togglePlayPause}>
           {isPlaying ? (
@@ -113,6 +127,23 @@ export default function EpisodeListComp({ episode }) {
           onLoadedMetadata={handleLoadedMetadata}
         />
       )}
+
+      {showPopup && (
+      <EpisodePopup 
+        onClose={handlePopupClose} 
+        isPlaying={isPlaying}
+        currentTime={currentTime}
+        duration={duration}
+        togglePlayPause={togglePlayPause}
+        handleSliderChange={handleSliderChange}
+        formatTime={formatTime}
+        episode={episode}
+        audioRef={audioRef}
+        handleTimeUpdate={handleTimeUpdate}
+        onEnded={() => setIsPlaying(false)}
+        handleLoadedMetadata={handleLoadedMetadata}
+      />
+      )}
     </div>
   );
 }
@@ -123,7 +154,6 @@ EpisodeListComp.propTypes = {
 
 /**
  * BUGS TO FIX:
- * play one of the episode.files at a time instead of loading all at once
  * to play again at exact point after pausing
  *
  * add to favourites / remove from favourites

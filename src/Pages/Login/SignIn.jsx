@@ -29,12 +29,6 @@ export default function SignIn(props) {
       });
 
       console.log('data: ', data);
-      console.log('data sesson: ', data.session);
-      console.log('data user: ', data.user);
-      console.log('error: ', error);
-      console.log('error.name: ', error.name);
-      console.log('error.message: ', error.message);
-
       if (error) {
         setFetchError(error.message)
       }

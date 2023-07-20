@@ -5,7 +5,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 export default function BottomNav() {
   return (
-    <nav className="fixed -bottom-0 -left-0 -right-0 flex justify-around bg-white shadow-bn">
+    <nav className="fixed -bottom-0 -left-0 -right-0 h-10 flex justify-around bg-white z-10">
         <Button>
           <ArrowBackIcon className="text-xl" />
         </Button>
