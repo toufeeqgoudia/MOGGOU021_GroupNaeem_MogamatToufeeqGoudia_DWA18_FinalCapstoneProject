@@ -14,6 +14,7 @@ const TinyText = styled(Typography)({
   opacity: 0.8,
   fontWeight: 500,
   letterSpacing: 0.2,
+  paddingLeft: '1rem',
 });
 
 export default function EpisodeListComp({ episode }) {
@@ -60,7 +61,7 @@ export default function EpisodeListComp({ episode }) {
   return (
     <div
       key={episode.title}
-      className="w-88 min-h-48 bg-gray-300 m-20px mx-auto mb-2 rounded-lg"
+      className="max-w-full min-h-48 bg-gray-300 mx-2 mb-2 rounded-lg"
     >
       <h4 className="text-sm px-1.5 py-1 font-bold">{episode.title}</h4>
       <p className="text-xs px-1.5 pb-1">{episode.description}</p>
@@ -77,7 +78,7 @@ export default function EpisodeListComp({ episode }) {
           </Button>
         )}
       
-      <div className="flex flex-row content-center items-center">
+      <div className="flex flex-row items-center justify-center">
         <Button onClick={togglePlayPause}>
           {isPlaying ? (
             <PauseCircleIcon className="nav-icon" onClick={togglePlayPause} />
@@ -85,8 +86,7 @@ export default function EpisodeListComp({ episode }) {
             <PlayCircleIcon className="nav-icon" onClick={togglePlayPause} />
           )}
         </Button>
-
-        <div className="w-full flex flex-row content-center items-center justify-evenly">
+ 
           <Slider
             aria-label="time-indicator"
             size="small"
@@ -115,7 +115,6 @@ export default function EpisodeListComp({ episode }) {
           />
 
           <TinyText>{formatTime(duration - currentTime)}</TinyText>
-        </div>
       </div>
       {isPlaying && (
         <audio

@@ -23,16 +23,22 @@ export default function EpisodeList() {
   }
 
   return (
-    <div className="my-10">
-      <div className='w-full h-1/3'>
+    <div className="my-10 w-screen">
+      <div className='flex w-full h-1/2 justify-evenly items-center'>
         <img
           src={showDetails.image}
           alt={showDetails.title}
-          className="w-full h-full"
+          className="w-1/5 rounded-sm my-1"
         />
+        <h3 className="text-2xl px-1.5 py-1 font-extrabold">{showDetails.title}</h3>
       </div>
-      <h3 className="text-xl px-1.5 py-1 font-bold">{showDetails.title}</h3>
+      <div className='px-2 text-center pb-2'>
+        <p className='text-sm'>
+          {showDetails.description}
+        </p>
+      </div>
 
+      <div className='text-center pb-2'>
       <FormControl sx={{ m: 1, width: 150 }} size="small">
         <InputLabel sx={{ fontSize: 13 }}>Select Season</InputLabel>
         <Select
@@ -56,6 +62,7 @@ export default function EpisodeList() {
             ))}
         </Select>
       </FormControl>
+      </div>
 
       {selectedSeasonDetails &&
         selectedSeasonDetails.episodes.map((episode) => (

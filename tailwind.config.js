@@ -10,7 +10,8 @@ export default {
         '88': '22rem'
       },
       height: {
-        '144': '32rem'
+        '144': '32rem',
+        '33' : '30%',
       },
       boxShadow: {
         'tn' : '0 2px 5px #696969',

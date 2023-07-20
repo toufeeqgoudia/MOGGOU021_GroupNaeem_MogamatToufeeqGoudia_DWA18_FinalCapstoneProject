@@ -11,6 +11,7 @@ const TinyText = styled(Typography)({
   opacity: 0.8,
   fontWeight: 500,
   letterSpacing: 0.2,
+  paddingLeft: '1rem',
 });
 
 export default function EpisodePopup({
@@ -36,7 +37,7 @@ export default function EpisodePopup({
             </Button>
         </div>
       
-      <div className="flex flex-row items-center justify-between px-5">
+      <div className="flex flex-row items-center justify-center">
         <Button variant='text' onClick={togglePlayPause}>
           {isPlaying ? (
             <PauseCircleIcon className="nav-icon" onClick={togglePlayPause} />

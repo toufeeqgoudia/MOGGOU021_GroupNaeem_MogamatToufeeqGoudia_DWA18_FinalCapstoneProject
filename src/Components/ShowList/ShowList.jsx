@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchShows } from '../../Services/api';
 import { genreMapping } from '../../Utils/genreMapping';
 import SeasonList from '../SeasonList/SeasonList';
+import DiscoverList from '../DiscoverList/DiscoverList';
 
 export default function ShowList() {
   const [shows, setShows] = useState([]);
@@ -34,6 +35,7 @@ export default function ShowList() {
 
   return (
     <>
+      <DiscoverList shows={shows} />
       <div className="mt-16 w-full flex flex-wrap justify-between">
         {shows.length > 0 &&
           shows.map((show) => (
