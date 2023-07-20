@@ -14,7 +14,7 @@ const TinyText = styled(Typography)({
   paddingLeft: '1rem',
 });
 
-export default function EpisodePopup({
+const EpisodePopup = ({
   onClose,
   isPlaying,
   currentTime,
@@ -27,7 +27,7 @@ export default function EpisodePopup({
   handleTimeUpdate,
   onEnded,
   handleLoadedMetadata,
-}) {
+}) => {
   return (
     <div className='fixed bottom-10 left-0 right-0 w-full h-18 bg-zinc-700 shadow-md flex flex-col z-10'>
         <div className='flex flex-row items-center justify-between'>
@@ -104,3 +104,5 @@ EpisodePopup.propTypes = {
   onEnded: PropTypes.func.isRequired,
   handleLoadedMetadata: PropTypes.func.isRequired,
 };
+
+export default EpisodePopup

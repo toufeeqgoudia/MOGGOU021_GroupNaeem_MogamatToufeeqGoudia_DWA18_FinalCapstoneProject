@@ -2,7 +2,7 @@ import ShowList from '../../Components/ShowList/ShowList';
 import SeasonList from '../../Components/SeasonList/SeasonList';
 // import EpisodeList from '../../Components/EpisodeList/EpisodeList'
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <ShowList path='/' />
@@ -10,3 +10,5 @@ export default function Home() {
     </>
   );
 }
+
+export default Home

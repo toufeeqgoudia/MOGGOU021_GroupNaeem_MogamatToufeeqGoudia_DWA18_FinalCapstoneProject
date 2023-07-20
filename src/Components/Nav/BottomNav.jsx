@@ -4,7 +4,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import HomeIcon from '@mui/icons-material/Home';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 
-export default function BottomNav() {
+const BottomNav = () => {
   const navigate = useNavigate()
 
   return (
@@ -21,3 +21,5 @@ export default function BottomNav() {
     </nav>
   );
 }
+
+export default BottomNav

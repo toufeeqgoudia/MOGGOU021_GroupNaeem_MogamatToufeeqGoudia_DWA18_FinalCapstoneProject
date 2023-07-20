@@ -3,7 +3,7 @@ import { fetchShows } from '../../Services/api';
 import { genreMapping } from '../../Utils/genreMapping';
 import SeasonList from '../SeasonList/SeasonList';
 
-export default function ShowList() {
+const ShowList = () => {
   const [shows, setShows] = useState([]);
   const [selectedShowId, setSelectedShowId] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -18,12 +18,12 @@ export default function ShowList() {
       });
   }, []);
 
-  function handleShow(showId) {
+  const handleShow = (showId) => {
     setSelectedShowId(showId);
     setDialogOpen(true);
   }
 
-  function handleDialog() {
+  const handleDialog = () => {
     setSelectedShowId(null);
     setDialogOpen(false);
   }
@@ -74,3 +74,5 @@ export default function ShowList() {
     </>
   );
 }
+
+export default ShowList

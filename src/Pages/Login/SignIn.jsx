@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { supabase } from '../../supabase';
 import { Button, TextField, Alert } from '@mui/material';
 
-export default function SignIn(props) {
+const SignIn = (props) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState('');
 
-  function handleChange(event) {
+  const handleChange = (event) => {
     setFormData((prevFormData) => {
       return {
         ...prevFormData,
@@ -17,7 +17,7 @@ export default function SignIn(props) {
     });
   }
 
-  async function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
@@ -88,3 +88,5 @@ export default function SignIn(props) {
     </div>
   );
 }
+
+export default SignIn

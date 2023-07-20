@@ -2,10 +2,10 @@ import { useState } from 'react';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 
-export default function Login() {
+const Login = () => {
   const [currentForm, setCurrentForm] = useState('register');
 
-  function toggleForm(formName) {
+  const toggleForm = (formName) => {
     setCurrentForm(formName);
   }
 
@@ -19,3 +19,5 @@ export default function Login() {
     </>
   );
 }
+
+export default Login

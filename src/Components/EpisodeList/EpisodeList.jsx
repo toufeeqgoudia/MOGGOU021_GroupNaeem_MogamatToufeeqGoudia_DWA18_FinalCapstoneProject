@@ -6,13 +6,13 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import EpisodeListComp from './EpisodeListComp';
 
-export default function EpisodeList() {
+const EpisodeList = () => {
   const location = useLocation();
   const showDetails = location.state;
   const [seasonSelected, setSeasonSelected] = useState('');
   const [selectedSeasonDetails, setSelectedSeasonDetails] = useState(null);
 
-  function handleSeasonSelect(event) {
+  const handleSeasonSelect = (event) => {
     const selectedSeason = event.target.value;
     setSeasonSelected(selectedSeason);
 
@@ -71,6 +71,8 @@ export default function EpisodeList() {
     </div>
   );
 }
+
+export default EpisodeList
 
 /**
  * BUGS TO FIX:

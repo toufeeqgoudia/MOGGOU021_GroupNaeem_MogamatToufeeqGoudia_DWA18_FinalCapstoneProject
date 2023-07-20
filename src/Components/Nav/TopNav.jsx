@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-export default function TopNav() {
+const TopNav = () => {
 
 
     return (
@@ -21,3 +21,5 @@ export default function TopNav() {
         </nav>
     )
 }
+
+export default TopNav

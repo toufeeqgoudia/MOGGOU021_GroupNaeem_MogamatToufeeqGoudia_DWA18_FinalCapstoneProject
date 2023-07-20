@@ -2,7 +2,7 @@
 // import Slider from 'react-slick';
 import PropTypes from 'prop-types'
 
-export default function DiscoverList({ shows }) {
+const DiscoverList = ({ shows }) => {
 
     return (
         <div>Hello World!</div>
@@ -12,3 +12,5 @@ export default function DiscoverList({ shows }) {
 DiscoverList.propTypes = {
     shows: PropTypes.array
 }
+
+export default DiscoverList

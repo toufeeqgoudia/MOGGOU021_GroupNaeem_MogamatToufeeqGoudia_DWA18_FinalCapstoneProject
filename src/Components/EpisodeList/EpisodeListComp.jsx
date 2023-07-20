@@ -17,7 +17,7 @@ const TinyText = styled(Typography)({
   paddingLeft: '1rem',
 });
 
-export default function EpisodeListComp({ episode }) {
+const EpisodeListComp = ({ episode }) => {
   const [addFavourites, setAddFavourites] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -25,7 +25,7 @@ export default function EpisodeListComp({ episode }) {
   const [showPopup, setShowPopup] = useState(false)
   const audioRef = useRef(null);
 
-  function addToFavourites() {
+  const addToFavourites = () => {
     setAddFavourites(!addFavourites);
   }
 
@@ -150,6 +150,8 @@ export default function EpisodeListComp({ episode }) {
 EpisodeListComp.propTypes = {
   episode: PropTypes.object,
 };
+
+export default EpisodeListComp
 
 /**
  * BUGS TO FIX:

@@ -6,7 +6,7 @@ import EpisodeList from './Components/EpisodeList/EpisodeList';
 // import Home from './Pages/Home/Home';
 // import Login from './Pages/Login/Login'
 
-function App() {
+const App = () => {
   return (
     <>
       <TopNav />

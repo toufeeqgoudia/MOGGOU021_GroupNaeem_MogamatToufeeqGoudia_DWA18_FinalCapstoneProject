@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { supabase } from '../../supabase';
 import { Button, TextField, Alert } from '@mui/material';
 
-export default function SignUp(props) {
+const SignUp = (props) => {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -22,7 +22,7 @@ export default function SignUp(props) {
     });
   }
 
-  async function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
@@ -117,3 +117,5 @@ export default function SignUp(props) {
     </div>
   );
 }
+
+export default SignUp

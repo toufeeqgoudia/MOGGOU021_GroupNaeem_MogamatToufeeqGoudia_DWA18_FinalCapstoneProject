@@ -13,7 +13,7 @@ const descStyles = {
   display: '-webkit-box',
 };
 
-export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
+const SeasonList = ({ show, isOpen, onClose, selectedShowId }) => {
   const [showDetails, setShowDetails] = useState({ seasons: [] });
   const [isDescOpen, setIsDescOpen] = useState(false);
   const [showMoreButton, setShowMoreButton] = useState(false);
@@ -49,12 +49,12 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
     }
   }, []);
 
-  function handleSeasonSelect(event) {
+  const handleSeasonSelect = (event) => {
     setSeasonSelect(event.target.value);
     navigate(`/${selectedShowId}/episodes`, { state: showDetails });
   }
 
-  function handleClose() {
+  const handleClose = () => {
     setSeasonSelect('');
     onClose();
     setIsDescOpen(false);
@@ -115,32 +115,11 @@ export default function Seasons({ show, isOpen, onClose, selectedShowId }) {
   );
 }
 
-Seasons.propTypes = {
+SeasonList.propTypes = {
   show: PropTypes.object,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   selectedShowId: PropTypes.string,
 };
 
-
-{/* <FormControl sx={{ m: 1, width: 150 }} size="small">
-            <InputLabel sx={{ fontSize: 13 }}>Select Season</InputLabel>
-            <Select
-              sx={{ height: 25, fontSize: 13 }}
-              size="small"
-              label="Select Season"
-              value={seasonSelect}
-              onChange={handleSeasonSelect}
-            >
-              {showDetails.seasons.length > 0 &&
-                showDetails.seasons.map((season) => (
-                  <MenuItem
-                    sx={{ fontSize: 13 }}
-                    key={season.season}
-                    value={season.season}
-                  >
-                    {season.title}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl> */}
+export default SeasonList
