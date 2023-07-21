@@ -1,24 +1,24 @@
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { genreMapping } from '../../Utils/genreMapping';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import CloseIcon from '@mui/icons-material/Close';
-import PropTypes from 'prop-types';
+import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { genreMapping } from "../../Utils/genreMapping";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import CloseIcon from "@mui/icons-material/Close";
+import PropTypes from "prop-types";
 
 const descStyles = {
   WebkitLineClamp: 5,
-  WebkitBoxOrient: 'vertical',
-  overflow: 'hidden',
-  display: '-webkit-box',
+  WebkitBoxOrient: "vertical",
+  overflow: "hidden",
+  display: "-webkit-box",
 };
 
 const SeasonList = ({ show, isOpen, onClose, selectedShowId }) => {
   const [showDetails, setShowDetails] = useState({ seasons: [] });
   const [isDescOpen, setIsDescOpen] = useState(false);
   const [showMoreButton, setShowMoreButton] = useState(false);
+  const [seasonSelect, setSeasonSelect] = useState("");
   const moreRef = useRef(null);
-  const [seasonSelect, setSeasonSelect] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const SeasonList = ({ show, isOpen, onClose, selectedShowId }) => {
             `https://podcast-api.netlify.app/id/${selectedShowId}`
           );
           if (!response.ok) {
-            throw new Error('Something went wrong. Try again later.');
+            throw new Error("Something went wrong. Try again later.");
           }
           const data = await response.json();
           setShowDetails(data);
@@ -52,17 +52,13 @@ const SeasonList = ({ show, isOpen, onClose, selectedShowId }) => {
   const handleSeasonSelect = (event) => {
     setSeasonSelect(event.target.value);
     navigate(`/${selectedShowId}/episodes`, { state: showDetails });
-  }
+  };
 
   const handleClose = () => {
-    setSeasonSelect('');
+    setSeasonSelect("");
     onClose();
     setIsDescOpen(false);
-  }
-
-  if (!show) {
-    return <div>Loading...</div>;
-  }
+  };
 
   return (
     <>
@@ -74,21 +70,27 @@ const SeasonList = ({ show, isOpen, onClose, selectedShowId }) => {
           <img src={show.image} alt={show.title} className="w-full h-52" />
           <h3 className="text-sm px-1.5 py-1 font-bold">{show.title}</h3>
 
-          <Button sx={{ margin: 1 }} variant="contained" onClick={handleSeasonSelect}>
+          <Button
+            sx={{ margin: 1 }}
+            variant="contained"
+            onClick={handleSeasonSelect}
+          >
             Go To
             {showDetails.seasons.length > 0 &&
-              showDetails.seasons.map((season) => <p key={season.season}>{seasonSelect}</p>)}
+              showDetails.seasons.map((season) => (
+                <p key={season.season}>{seasonSelect}</p>
+              ))}
           </Button>
 
           <p className="text-xs px-1.5 pb-1">
-            {show.genres.map((genreId) => genreMapping[genreId]).join(', ')}
+            {show.genres.map((genreId) => genreMapping[genreId]).join(", ")}
           </p>
           <p className="text-xs px-1.5 pb-1">
-            Last Updated:{' '}
-            {new Date(show.updated).toLocaleDateString('en-GB', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
+            Last Updated:{" "}
+            {new Date(show.updated).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
             })}
           </p>
           <div>
@@ -105,7 +107,7 @@ const SeasonList = ({ show, isOpen, onClose, selectedShowId }) => {
                 size="small"
                 onClick={() => setIsDescOpen(!isDescOpen)}
               >
-                {isDescOpen ? 'read less...' : 'read more...'}
+                {isDescOpen ? "read less..." : "read more..."}
               </Button>
             )}
           </div>
@@ -113,7 +115,7 @@ const SeasonList = ({ show, isOpen, onClose, selectedShowId }) => {
       </Dialog>
     </>
   );
-}
+};
 
 SeasonList.propTypes = {
   show: PropTypes.object,
@@ -122,4 +124,4 @@ SeasonList.propTypes = {
   selectedShowId: PropTypes.string,
 };
 
-export default SeasonList
+export default SeasonList;
