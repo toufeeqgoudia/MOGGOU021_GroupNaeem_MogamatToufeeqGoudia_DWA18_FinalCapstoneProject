@@ -4,6 +4,7 @@ import { genreMapping } from "../../Utils/genreMapping";
 import SeasonList from "../SeasonList/SeasonList";
 import DiscoverList from "../DiscoverList/DiscoverList";
 import useLoadingStore from "../../Model/useStore";
+import SearchComponent from "../SearchComponent/SearchComponent";
 
 const ShowList = () => {
   const [shows, setShows] = useState([]);
@@ -43,9 +44,10 @@ const ShowList = () => {
         <div>Loading...</div>
       ) : (
         <>
+          <SearchComponent />
           <DiscoverList shows={shows} />
           <h1>All Shows: </h1>
-          <div className="mt-1 w-screen flex flex-wrap justify-between">
+          <div className="mt-1 max-w-screen flex flex-wrap justify-between">
             {shows.length > 0 &&
               shows.map((show) => (
                 <div

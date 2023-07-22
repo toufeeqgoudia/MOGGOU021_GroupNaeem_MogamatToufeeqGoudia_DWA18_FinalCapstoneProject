@@ -29,7 +29,7 @@ const EpisodePopup = ({
   handleLoadedMetadata,
 }) => {
   return (
-    <div className='fixed bottom-10 left-0 right-0 w-full h-18 bg-zinc-700 shadow-md flex flex-col z-10'>
+    <div className='fixed bottom-10 left-0 right-0 max-w-screen h-18 bg-zinc-700 shadow-md flex flex-col z-10'>
         <div className='flex flex-row items-center justify-between'>
             <h4 className="text-xs px-1.5 pb-1 font-bold">{episode.title}</h4>
             <Button onClick={onClose} className="z-10">

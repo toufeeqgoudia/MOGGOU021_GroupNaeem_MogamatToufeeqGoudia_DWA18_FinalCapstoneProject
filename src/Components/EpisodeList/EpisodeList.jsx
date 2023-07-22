@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -23,7 +23,7 @@ const EpisodeList = () => {
   };
 
   return (
-    <div className="my-10 w-screen">
+    <div className="my-10 max-w-screen">
       <div className="flex w-full h-1/2 justify-evenly items-center">
         <img
           src={showDetails.image}

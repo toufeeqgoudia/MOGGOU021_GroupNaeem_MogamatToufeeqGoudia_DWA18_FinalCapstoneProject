@@ -61,7 +61,7 @@ const EpisodeListComp = ({ episode }) => {
   return (
     <div
       key={episode.title}
-      className="max-w-full min-h-48 bg-gray-300 mx-2 mb-2 rounded-lg"
+      className="max-w-screen min-h-48 bg-gray-300 mx-2 mb-2 rounded-lg"
     >
       <h4 className="text-sm px-1.5 py-1 font-bold">{episode.title}</h4>
       <p className="text-xs px-1.5 pb-1">{episode.description}</p>

@@ -29,8 +29,8 @@ const DiscoverList = ({ shows }) => {
     infinite: true,
     speed: 500,
     slidesToShow: 3,
-    prevArrow: <NavigateBeforeIcon />,
-    nextArrow: <NavigateNextIcon />,
+    prevArrow: <NavigateBeforeIcon sx={{color: '#4c8bf5'}} />,
+    nextArrow: <NavigateNextIcon sx={{color: '#4c8bf5'}} />,
   };
 
   const handleShow = (showId) => {
@@ -45,7 +45,7 @@ const DiscoverList = ({ shows }) => {
 
   return (
     <>
-      <div className="mt-16 w-screen flex flex-col justify-self-center content-center">
+      <div className="mt-16 max-w-screen flex flex-col justify-self-center content-center">
         <h2>Podcasts you may be interested in...</h2>
         <div className="flex justify-center items-center">
           <Slider {...settings} className="w-3/4 inline-flex items-center justify-evenly" ref={sliderRef}>
