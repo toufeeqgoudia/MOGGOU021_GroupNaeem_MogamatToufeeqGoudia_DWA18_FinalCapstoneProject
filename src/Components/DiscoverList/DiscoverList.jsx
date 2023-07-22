@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import PropTypes from "prop-types";
@@ -24,13 +25,41 @@ const DiscoverList = ({ shows }) => {
     setRandomShows(randomPodcasts);
   }, [shows]);
 
+  const PrevArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <button
+        onClick={onClick}
+        className="slick-prev"
+        style={{ border: "none", background: "transparent" }}
+      >
+        <NavigateBeforeIcon sx={{ color: "#4c8bf5" }} />
+      </button>
+    );
+  };
+
+  const NextArrow = (props) => {
+    const { onClick } = props;
+    return (
+      <button
+        onClick={onClick}
+        className="slick-next"
+        style={{ border: "none", background: "transparent" }}
+      >
+        <NavigateNextIcon sx={{ color: "#4c8bf5" }} />
+      </button>
+    );
+  };
+
   const settings = {
     draggable: false,
     infinite: true,
-    speed: 500,
+    speed: 400,
     slidesToShow: 3,
-    prevArrow: <NavigateBeforeIcon sx={{color: '#4c8bf5'}} />,
-    nextArrow: <NavigateNextIcon sx={{color: '#4c8bf5'}} />,
+    rtl: false,
+    variableWidth: false, 
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
   };
 
   const handleShow = (showId) => {
@@ -43,12 +72,19 @@ const DiscoverList = ({ shows }) => {
     setDialogOpen(false);
   };
 
+  const result = randomShows.map((show) => show.id)
+  console.log('result: ', result)
+
   return (
     <>
-      <div className="mt-16 max-w-screen flex flex-col justify-self-center content-center">
-        <h2>Podcasts you may be interested in...</h2>
+      <div className="mt-5 max-w-screen flex flex-col justify-self-center content-center">
+        <h2 className="mb-5">Podcasts you may be interested in...</h2>
         <div className="flex justify-center items-center">
-          <Slider {...settings} className="w-3/4 inline-flex items-center justify-evenly" ref={sliderRef}>
+          <Slider
+            {...settings}
+            className="w-3/4 inline-flex items-center justify-evenly"
+            ref={sliderRef}
+          >
             {randomShows.map((show) => (
               <div
                 key={show.id}
@@ -77,6 +113,7 @@ const DiscoverList = ({ shows }) => {
 
 DiscoverList.propTypes = {
   shows: PropTypes.array,
+  onClick: PropTypes.func,
 };
 
 export default DiscoverList;
