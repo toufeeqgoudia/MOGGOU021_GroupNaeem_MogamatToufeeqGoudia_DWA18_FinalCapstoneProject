@@ -9,6 +9,7 @@ const ShowList = () => {
   const [shows, setShows] = useState([]);
   const [selectedShowId, setSelectedShowId] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+
   const isLoading = useLoadingStore((state) => state.loading);
   const setLoading = useLoadingStore((state) => state.setLoading);
 
@@ -24,7 +25,7 @@ const ShowList = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [setLoading]);
 
   const handleShow = (showId) => {
     setSelectedShowId(showId);
@@ -43,7 +44,8 @@ const ShowList = () => {
       ) : (
         <>
           <DiscoverList shows={shows} />
-          <div className="mt-16 w-full flex flex-wrap justify-between">
+          <h1>All Shows: </h1>
+          <div className="mt-1 w-screen flex flex-wrap justify-between">
             {shows.length > 0 &&
               shows.map((show) => (
                 <div
@@ -78,13 +80,13 @@ const ShowList = () => {
                 </div>
               ))}
           </div>
-          <SeasonList
-            show={shows.find((show) => show.id === selectedShowId)}
-            isOpen={dialogOpen}
-            onClose={handleDialog}
-            selectedShowId={selectedShowId}
-          />
-        </>
+      <SeasonList
+        show={shows.find((show) => show.id === selectedShowId)}
+        isOpen={dialogOpen}
+        onClose={handleDialog}
+        selectedShowId={selectedShowId}
+      />
+      </>
       )}
     </>
   );

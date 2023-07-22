@@ -60,6 +60,10 @@ const SeasonList = ({ show, isOpen, onClose, selectedShowId }) => {
     setIsDescOpen(false);
   };
 
+  if (!show) {
+    return <div></div>
+  }
+
   return (
     <>
       <Dialog open={isOpen} onClose={handleClose}>

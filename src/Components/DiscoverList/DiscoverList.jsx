@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import PropTypes from "prop-types";
 import SeasonList from "../SeasonList/SeasonList";
 
@@ -9,6 +10,7 @@ const DiscoverList = ({ shows }) => {
   const [randomShows, setRandomShows] = useState([]);
   const [selectedShowId, setSelectedShowId] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const sliderRef = useRef();
 
   useEffect(() => {
     const getRandomPodcasts = (count) => {
@@ -20,13 +22,15 @@ const DiscoverList = ({ shows }) => {
     const numberOfPodcasts = 10;
     const randomPodcasts = getRandomPodcasts(numberOfPodcasts);
     setRandomShows(randomPodcasts);
-  }, []);
+  }, [shows]);
 
   const settings = {
-    dots: true,
+    draggable: false,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
+    prevArrow: <NavigateBeforeIcon />,
+    nextArrow: <NavigateNextIcon />,
   };
 
   const handleShow = (showId) => {
@@ -41,23 +45,25 @@ const DiscoverList = ({ shows }) => {
 
   return (
     <>
-      <div className="mt-16">
-        <h2>You may be interested in...</h2>
-        <Slider {...settings}>
-          {randomShows.map((show) => (
-            <div
-              key={show.id}
-              className="w-44 m-20px mx-auto bg-gray-300 rounded-lg text-left cursor-pointer object-fill border-none"
-              onClick={() => handleShow(show.id)}
-            >
-              <img
-                src={show.image}
-                alt={show.title}
-                className="w-full top-0 rounded-lg"
-              />
-            </div>
-          ))}
-        </Slider>
+      <div className="mt-16 w-screen flex flex-col justify-self-center content-center">
+        <h2>Podcasts you may be interested in...</h2>
+        <div className="flex justify-center items-center">
+          <Slider {...settings} className="w-3/4 inline-flex items-center justify-evenly" ref={sliderRef}>
+            {randomShows.map((show) => (
+              <div
+                key={show.id}
+                className="rounded-lg text-left cursor-pointer object-fill border-none"
+                onClick={() => handleShow(show.id)}
+              >
+                <img
+                  src={show.image}
+                  alt={show.title}
+                  className="w-full top-0 rounded-lg"
+                />
+              </div>
+            ))}
+          </Slider>
+        </div>
       </div>
       <SeasonList
         show={randomShows.find((show) => show.id === selectedShowId)}
