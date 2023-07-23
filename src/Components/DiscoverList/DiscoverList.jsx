@@ -72,9 +72,6 @@ const DiscoverList = ({ shows }) => {
     setDialogOpen(false);
   };
 
-  const result = randomShows.map((show) => show.id)
-  console.log('result: ', result)
-
   return (
     <>
       <div className="mt-5 max-w-screen flex flex-col justify-self-center content-center">

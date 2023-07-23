@@ -4,7 +4,7 @@ import { genreMapping } from "../../Utils/genreMapping";
 import SeasonList from "../SeasonList/SeasonList";
 import DiscoverList from "../DiscoverList/DiscoverList";
 import useLoadingStore from "../../Model/useStore";
-import SearchComponent from "../SearchComponent/SearchComponent";
+import SearchShows from "../SearchShows/SearchShows";
 
 const ShowList = () => {
   const [shows, setShows] = useState([]);
@@ -49,7 +49,7 @@ const ShowList = () => {
         <div>Loading...</div>
       ) : (
         <>
-          <SearchComponent
+          <SearchShows
             shows={shows}
             onSearchResults={handleSearchResults}
           />
