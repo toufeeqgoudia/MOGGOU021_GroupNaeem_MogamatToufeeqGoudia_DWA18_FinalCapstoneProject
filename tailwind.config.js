@@ -10,9 +10,16 @@ export default {
         '88': '22rem',
         '365': '365px',
       },
+      maxWidth: {
+        'cc': '155px',
+        '280px': '280px'
+      },
       height: {
         '144': '32rem',
         '33' : '30%',
+      },
+      padding: {
+        'cc': '9px'
       },
       boxShadow: {
         'tn' : '0 2px 5px #696969',

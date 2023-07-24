@@ -17,7 +17,7 @@ const Favourites = () => {
             <h2>Favourite Episodes</h2>
             {favouriteEpisodes.length === 0 ? (
                 <p>No favourite episodes yet.</p>
-            ): (
+            ) : (
                 <div>
                     {favouriteEpisodes.map((episode) => (
                         <div key={episode.title}>

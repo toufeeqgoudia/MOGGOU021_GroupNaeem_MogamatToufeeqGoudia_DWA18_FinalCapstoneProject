@@ -54,14 +54,14 @@ const SignUp = (props) => {
 
     setLoading(false);
   };
-
+  // flex items-center justify-center : for image div
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center justify-center">
+    <div className="flex flex-col justify-center items-center">
+      <div className="w-24 h-24 m-5 rounded-full flex items-center justify-center overflow-hidden">
         <img
-          src="/PodHub-nav-logo.png"
+          src="/android-chrome-384x384.png"
           alt="PodHub Logo"
-          className="w-80 h-40 p-5 rounded-3xl"
+          className="max-w-cc pt-cc"
         />
       </div>
       <form
@@ -91,7 +91,7 @@ const SignUp = (props) => {
           className="w-72"
         />
         <TextField
-          label="Email"
+          label="E-mail"
           type="email"
           name="email"
           autoComplete="on"

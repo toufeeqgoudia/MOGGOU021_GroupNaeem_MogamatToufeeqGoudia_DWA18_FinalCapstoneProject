@@ -34,8 +34,6 @@ const SignIn = (props) => {
         setFetchError(error.message);
       }
 
-      console.log(data);
-
       if (data.session !== null && data.user !== null) {
         navigate("/");
       }
@@ -47,12 +45,12 @@ const SignIn = (props) => {
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center justify-center">
+    <div className="flex flex-col justify-center items-center">
+      <div className="w-24 h-24 m-5 rounded-full flex items-center justify-center overflow-hidden">
         <img
-          src="/PodHub-nav-logo.png"
+          src="/android-chrome-384x384.png"
           alt="PodHub Logo"
-          className="w-80 h-40 p-5 rounded-3xl"
+          className="max-w-cc pt-cc"
         />
       </div>
       <form
@@ -62,7 +60,7 @@ const SignIn = (props) => {
         <h3 className="text-2xl mt-0 text-center">Sign In</h3>
         {fetchError && <Alert severity="error">{fetchError}</Alert>}
         <TextField
-          label="Email"
+          label="E-mail"
           type="email"
           name="email"
           autoComplete="on"

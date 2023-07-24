@@ -5,18 +5,19 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
+import Divider from "@mui/material/Divider";
 
 const TopNav = () => {
   const [theme, setTheme] = useState("light");
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const toggleTheme = () => {
     setTheme(!theme);
   };
 
   const handleDialog = () => {
-    setDialogOpen(!dialogOpen)
-  }
+    setDialogOpen(!dialogOpen);
+  };
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -47,7 +48,14 @@ const TopNav = () => {
         </Button>
       </div>
       <Dialog open={dialogOpen} onClose={handleDialog}>
-        <Button onClick={handleLogout}>Sign Out</Button>
+        <div className="w-72 h-44">
+          <h3 className="text-lg m-1">Settings</h3>
+          <Divider variant="fullWidth" />
+          <div className="max-w-full flex flex-col justify-center items-center">
+              <Button variant="contained" sx={{ width: '90%', height: '50px', marginTop: '10px' }} onClick={handleLogout}>Sign Out</Button>
+              <Button variant="contained" sx={{ width: '90%', height: '50px', marginTop: '10px' }} onClick={handleDialog}>Cancel</Button>
+          </div>
+        </div>
       </Dialog>
     </nav>
   );

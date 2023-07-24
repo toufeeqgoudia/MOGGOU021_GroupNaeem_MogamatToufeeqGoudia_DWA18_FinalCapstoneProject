@@ -73,7 +73,7 @@ const DiscoverList = ({ shows }) => {
   return (
     <>
       <div className="mt-5 max-w-screen flex flex-col justify-self-center content-center">
-        <h2 className="mb-5">Podcasts you may be interested in...</h2>
+        <h2 className="mb-5 ml-3">Podcasts you may be interested in...</h2>
         <div className="flex justify-center items-center">
           <Slider
             {...settings}

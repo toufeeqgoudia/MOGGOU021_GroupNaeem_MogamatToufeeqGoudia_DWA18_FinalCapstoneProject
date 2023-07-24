@@ -92,7 +92,7 @@ const ShowList = () => {
           ) : (
             <>
               <DiscoverList shows={shows} />
-              <h1 className="mt-10">All Shows: </h1>
+              <h1 className="mt-10 ml-3">All Shows: </h1>
               <div className="mt-5 max-w-screen flex flex-wrap justify-between">
                 {shows.length > 0 &&
                   shows.map((show) => (
