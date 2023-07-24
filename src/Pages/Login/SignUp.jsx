@@ -1,17 +1,19 @@
-/* eslint-disable react/prop-types */
-import { useState } from 'react';
-import { supabase } from '../../supabase';
-import { Button, TextField, Alert } from '@mui/material';
+import { useState } from "react";
+import { supabase } from "../../Config/supabase";
+import { useNavigate } from "react-router-dom";
+import { Button, TextField, Alert } from "@mui/material";
+import PropTypes from "prop-types";
 
 const SignUp = (props) => {
   const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    password: '',
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [fetchError, setFetchError] = useState('');
+  const [fetchError, setFetchError] = useState("");
+  const navigate = useNavigate();
 
   function handleChange(event) {
     setFormData((prevFormData) => {
@@ -39,21 +41,33 @@ const SignUp = (props) => {
         },
       });
 
-      console.log('data: ', data);
-      console.log('error: ', error)
+      if (error) {
+        setFetchError(error.message);
+      }
+
+      if (data.session !== null && data.user !== null) {
+        navigate("/");
+      }
     } catch {
-      setFetchError('Failed to sign in');
+      setFetchError("Failed to sign in");
     }
 
     setLoading(false);
-  }
+  };
 
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-center">
-        <img src="/PodHub-nav-logo.png" alt="PodHub Logo" className="w-80 h-40 p-5 rounded-3xl" />
+        <img
+          src="/PodHub-nav-logo.png"
+          alt="PodHub Logo"
+          className="w-80 h-40 p-5 rounded-3xl"
+        />
       </div>
-      <form className="flex flex-col border-solid border-2 border-black rounded-xl m-0 mx-auto p-3" onSubmit={handleSubmit}>
+      <form
+        className="flex flex-col border-solid border-2 border-black rounded-xl m-0 mx-auto p-3"
+        onSubmit={handleSubmit}
+      >
         <h3 className="text-2xl mt-0 text-center">Sign Up</h3>
         {fetchError && <Alert severity="error">{fetchError}</Alert>}
         <TextField
@@ -110,12 +124,126 @@ const SignUp = (props) => {
       <Button
         variant="text"
         className="p-5 bg-none underline cursor-pointer text-center"
-        onClick={() => props.onFormSwitch('login')}
+        onClick={() => props.onFormSwitch("login")}
       >
         Already have an account? Login here.
       </Button>
     </div>
   );
-}
+};
 
-export default SignUp
+SignUp.propTypes = {
+  onFormSwitch: PropTypes.func,
+};
+
+export default SignUp;
+
+// import { useRef, useState } from 'react';
+// import useAuth from '../../Hooks/useAuth';
+// import { useNavigate } from 'react-router-dom';
+// import { Button, TextField, Alert } from '@mui/material';
+// import PropTypes from 'prop-types'
+
+// const SignUp = (props) => {
+//   const emailRef = useRef()
+//   const passwordRef = useRef()
+//   const { signup } = useAuth()
+//   const [loading, setLoading] = useState(false);
+//   const [fetchError, setFetchError] = useState('');
+//   const navigate = useNavigate()
+
+//   console.log('signup1: ', signup)
+
+//   const handleSubmit = async (event) => {
+//     event.preventDefault();
+
+//     try {
+//       setLoading(true);
+//       setFetchError('')
+
+//       await signup(emailRef.current.value, passwordRef.current.value);
+
+//       navigate('/')
+
+//     } catch {
+//       setFetchError('Failed to sign up');
+//     }
+
+//     setLoading(false);
+//   }
+
+//   console.log('signup2: ', signup)
+
+//   return (
+//     <div className="flex flex-col">
+//       <div className="flex items-center justify-center">
+//         <img src="/PodHub-nav-logo.png" alt="PodHub Logo" className="w-80 h-40 p-5 rounded-3xl" />
+//       </div>
+//       <form className="flex flex-col border-solid border-2 border-black rounded-xl m-0 mx-auto p-3" onSubmit={handleSubmit}>
+//         <h3 className="text-2xl mt-0 text-center">Sign Up</h3>
+//         {fetchError && <Alert severity="error">{fetchError}</Alert>}
+//         <TextField
+//           label="First Name"
+//           type="text"
+//           name='firstname'
+//           autoComplete="on"
+//           variant="outlined"
+//           size="small"
+//           margin="dense"
+//           className="w-72"
+//         />
+//         <TextField
+//           label="Last Name"
+//           type="text"
+//           name='lastname'
+//           autoComplete="on"
+//           variant="outlined"
+//           size="small"
+//           margin="dense"
+//           className="w-72"
+//         />
+//         <TextField
+//           label="Email"
+//           type="email"
+//           ref={emailRef}
+//           autoComplete="on"
+//           variant="outlined"
+//           size="small"
+//           margin="dense"
+//           className="w-72"
+//         />
+//         <TextField
+//           label="Password"
+//           type="password"
+//           ref={passwordRef}
+//           autoComplete="off"
+//           variant="outlined"
+//           size="small"
+//           margin="dense"
+//           className="w-72"
+//         />
+//         <Button
+//           type="submit"
+//           variant="contained"
+//           disabled={loading}
+//           className="w-36 self-center"
+//         >
+//           Sign Up
+//         </Button>
+//       </form>
+//       <Button
+//         variant="text"
+//         className="p-5 bg-none underline cursor-pointer text-center"
+//         onClick={() => props.onFormSwitch('login')}
+//       >
+//         Already have an account? Login here.
+//       </Button>
+//     </div>
+//   );
+// }
+
+// SignUp.propTypes = {
+//   onFormSwitch: PropTypes.func
+// }
+
+// export default SignUp

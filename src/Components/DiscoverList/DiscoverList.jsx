@@ -56,8 +56,6 @@ const DiscoverList = ({ shows }) => {
     infinite: true,
     speed: 400,
     slidesToShow: 3,
-    rtl: false,
-    variableWidth: false, 
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
   };
@@ -79,7 +77,7 @@ const DiscoverList = ({ shows }) => {
         <div className="flex justify-center items-center">
           <Slider
             {...settings}
-            className="w-3/4 inline-flex items-center justify-evenly"
+            className="w-3/4"
             ref={sliderRef}
           >
             {randomShows.map((show) => (

@@ -1,22 +1,25 @@
-import { Route, Routes } from 'react-router-dom';
-import TopNav from './Components/Nav/TopNav';
-import BottomNav from './Components/Nav/BottomNav';
-import ShowList from './Components/ShowList/ShowList';
-import EpisodeList from './Components/EpisodeList/EpisodeList';
-// import Home from './Pages/Home/Home';
-// import Login from './Pages/Login/Login'
+import { Route, Routes } from "react-router-dom";
+import Home from "./Pages/Home/Home";
+import Login from "./Pages/Login/Login";
+import { AuthProvider } from "./Context/AuthProvider";
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 const App = () => {
   return (
-    <>
-      <TopNav />
+    <AuthProvider>
       <Routes>
-        <Route path="/" element={<ShowList />} />
-        <Route path="/:showId/episodes" element={<EpisodeList />} />
+      <Route path="/login" element={<Login />} />
+        <Route
+          path="/*"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-      <BottomNav />
-    </>
+    </AuthProvider>
   );
-}
+};
 
 export default App;

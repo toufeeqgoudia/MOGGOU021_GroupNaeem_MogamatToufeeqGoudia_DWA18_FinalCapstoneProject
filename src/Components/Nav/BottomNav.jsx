@@ -12,10 +12,10 @@ const BottomNav = () => {
         <Button onClick={() => navigate(-1)}>
           <ArrowBackIcon className="text-xl" />
         </Button>
-        <Button>
+        <Button onClick={() => navigate('/recents')}>
           <HistoryIcon className="text-xl" />
         </Button>
-        <Button>
+        <Button onClick={() => navigate('/favourites')}>
           <StarBorderIcon className="text-xl" />
         </Button>
     </nav>
