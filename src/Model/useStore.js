@@ -1,8 +1,11 @@
 import { create } from "zustand";
 
-const useLoadingStore = create((set) => ({
+export const useLoadingStore = create((set) => ({
     loading: true,
     setLoading: (isLoading) => set({ loading: isLoading })
 }))
 
-export default useLoadingStore
+export const useFavouriteStore = create((set) => ({
+    favouriteData: [],
+    setFavouriteData: (data) => set({ favouriteData: data })
+}))

@@ -3,7 +3,7 @@ import { fetchShows } from "../../Services/api";
 import { genreMapping } from "../../Utils/genreMapping";
 import SeasonList from "../SeasonList/SeasonList";
 import DiscoverList from "../DiscoverList/DiscoverList";
-import useLoadingStore from "../../Model/useStore";
+import { useLoadingStore } from "../../Model/useStore";
 import SearchShows from "../SearchShows/SearchShows";
 
 const ShowList = () => {
