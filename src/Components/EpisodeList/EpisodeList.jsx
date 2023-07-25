@@ -40,7 +40,9 @@ const EpisodeList = () => {
 
       <div className="text-center pb-2">
         <FormControl sx={{ m: 1, width: 150 }} size="small">
-          <InputLabel sx={{ fontSize: 13, marginTop: '-5px' }}>Select Season</InputLabel>
+          <InputLabel sx={{ fontSize: 13, marginTop: "-5px" }}>
+            Select Season
+          </InputLabel>
           <Select
             sx={{ height: 25, fontSize: 13 }}
             size="small"

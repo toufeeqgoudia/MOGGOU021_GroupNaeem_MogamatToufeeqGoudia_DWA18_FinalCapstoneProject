@@ -5,7 +5,20 @@ export const useLoadingStore = create((set) => ({
     setLoading: (isLoading) => set({ loading: isLoading })
 }))
 
-export const useFavouriteStore = create((set) => ({
+const useFavouriteStore = create((set) => ({
     favouriteData: [],
-    setFavouriteData: (data) => set({ favouriteData: data })
+
+    setFavouriteData: (data) => {
+        set({ favouriteData: data });
+        localStorage.setItem("favouriteData", JSON.stringify(data))
+    }
 }))
+
+const initialFavouriteData = localStorage.getItem("favouriteData")
+if (initialFavouriteData) {
+    useFavouriteStore.setState({
+        favouriteData: JSON.parse(initialFavouriteData),
+    })
+}
+
+export default useFavouriteStore
