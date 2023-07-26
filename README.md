@@ -93,6 +93,7 @@ Welcome to PodHub!
 - react-dom
 - react-router-dom
 - react-slick
+- semver
 - slick-carousel
 - zustand
 

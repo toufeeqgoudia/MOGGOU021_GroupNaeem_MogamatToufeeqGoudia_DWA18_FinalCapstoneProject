@@ -4,7 +4,7 @@ import BottomNav from '../../Components/Nav/BottomNav';
 import ShowList from '../../Components/ShowList/ShowList';
 import EpisodeList from '../../Components/EpisodeList/EpisodeList'
 import Favourites from '../Favourites/Favourites';
-import Recents from '../Recents/Recents';
+// import Recents from '../Recents/Recents';
 
 const Home = () => {
   return (
@@ -14,7 +14,7 @@ const Home = () => {
         <Route path="/" element={<ShowList />} />
         <Route path="/:showId/episodes" element={<EpisodeList />} />
         <Route path="/favourites" element={<Favourites />} />
-        <Route path="/recents" element={<Recents />} />
+        {/* <Route path="/recents" element={<Recents />} /> */}
       </Routes>
       <BottomNav />
     </>

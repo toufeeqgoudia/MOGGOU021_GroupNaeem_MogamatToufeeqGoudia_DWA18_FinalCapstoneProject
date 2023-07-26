@@ -73,7 +73,7 @@ const EpisodePopup = ({
             }}
           />
 
-          <TinyText>{formatTime(duration - currentTime)}</TinyText>
+          <TinyText><span>{formatTime(duration - currentTime)}</span></TinyText>
 
         {isPlaying && (
           <audio

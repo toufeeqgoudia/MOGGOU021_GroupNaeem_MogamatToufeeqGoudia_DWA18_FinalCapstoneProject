@@ -3,7 +3,7 @@ import { fetchShows } from "../../Services/api";
 import { genreMapping } from "../../Utils/genreMapping";
 import SeasonList from "../SeasonList/SeasonList";
 import DiscoverList from "../DiscoverList/DiscoverList";
-import { useLoadingStore } from "../../Model/useStore";
+import useLoadingStore from "../../Model/useStore";
 import SearchShows from "../SearchShows/SearchShows";
 
 const ShowList = () => {
@@ -49,10 +49,7 @@ const ShowList = () => {
         <div>Loading...</div>
       ) : (
         <>
-          <SearchShows
-            shows={shows}
-            onSearchResults={handleSearchResults}
-          />
+          <SearchShows shows={shows} onSearchResults={handleSearchResults} />
 
           {searchResults.length > 0 ? (
             <div className="mt-10 max-w-screen flex flex-wrap justify-between">

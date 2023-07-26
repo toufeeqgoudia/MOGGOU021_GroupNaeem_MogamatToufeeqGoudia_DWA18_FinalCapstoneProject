@@ -35,28 +35,28 @@ const SearchFavs = ({ favouriteData, onSearchResults }) => {
 
   return (
     <div className="my-4 mx-2">
-          <FormControl sx={{ width: "45%", height: "30px" }}>
-            <InputLabel sx={{ marginTop: '-7px' }}>Sort by</InputLabel>
-            <Select
-              label="Sort by"
-              value={sortOption}
-              onChange={handleSortChange}
-              sx={{
-                marginTop: "5px",
-                p: "2px 4px",
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <MenuItem value="">Sort by</MenuItem>
-              <MenuItem value="az">Title (A to Z)</MenuItem>
-              <MenuItem value="za">Title (Z to A)</MenuItem>
-              <MenuItem value="dateAsc">Date (Ascending)</MenuItem>
-              <MenuItem value="dateDesc">Date (Descending)</MenuItem>
-            </Select>
-          </FormControl>
+      <FormControl sx={{ width: "45%", height: "30px" }}>
+        <InputLabel sx={{ marginTop: "-7px" }}>Sort by</InputLabel>
+        <Select
+          label="Sort by"
+          value={sortOption}
+          onChange={handleSortChange}
+          sx={{
+            marginTop: "5px",
+            p: "2px 4px",
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <MenuItem value="">Sort by</MenuItem>
+          <MenuItem value="az">Title (A to Z)</MenuItem>
+          <MenuItem value="za">Title (Z to A)</MenuItem>
+          <MenuItem value="dateAsc">Date (Ascending)</MenuItem>
+          <MenuItem value="dateDesc">Date (Descending)</MenuItem>
+        </Select>
+      </FormControl>
     </div>
   );
 };

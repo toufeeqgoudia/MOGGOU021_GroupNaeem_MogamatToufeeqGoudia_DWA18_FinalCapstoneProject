@@ -1,4 +1,6 @@
 import { useState, useRef } from "react";
+import { supabase } from "../../Config/supabase";
+import useLoadingStore from "../../Model/useStore";
 import Button from "@mui/material/Button";
 import Slider from "@mui/material/Slider";
 import { styled, Typography } from "@mui/material";
@@ -8,7 +10,6 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PropTypes from "prop-types";
 import EpisodePopup from "./EpisodePopup";
-import useFavouriteStore from "../../Model/useStore";
 
 const TinyText = styled(Typography)({
   fontSize: "0.75rem",
@@ -22,24 +23,60 @@ const EpisodeListComp = ({ episode }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [showPopup, setShowPopup] = useState(false)
+  const [showPopup, setShowPopup] = useState(false);
   const audioRef = useRef(null);
-  const { favouriteData, setFavouriteData } = useFavouriteStore();
+  const [favouriteEpisode, setFavouriteEpisode] = useState([]);
 
-  const isEpisodeInFavourites = favouriteData.some((favEpisode) => favEpisode.title === episode.title)
+  /**
+   * FIX REMOVE FROM FAVOURITES
+   */
+  const isEpisodeInFavourites = favouriteEpisode.some(
+    (favEpisode) => favEpisode.title === episode.title
+  );
 
-  const addToFavourites = () => {
-    if (isEpisodeInFavourites) {
-      const updatedFavourites = favouriteData.filter((favEpisode) => favEpisode.title !== episode.title)
-      setFavouriteData(updatedFavourites)
-    } else {
-      const episodeToAdd = {
-        ...episode,
-        timestamp: new Date().toISOString()
+  const addToFavourites = async () => {
+    try {
+      useLoadingStore.setState({ loading: true });
+
+      if (!isEpisodeInFavourites) {
+        const { data, error } = await supabase
+          .from("favouriteEpisodes")
+          .insert({
+            title: episode.title,
+            description: episode.description,
+            episode: episode.episode,
+            file: episode.file,
+          })
+          .select("*");
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+
+        if (data) {
+          setFavouriteEpisode(data);
+        }
+      } else if (isEpisodeInFavourites) {
+        const { data, error } = await supabase
+          .from("favouriteEpisodes")
+          .delete()
+          .eq("title", episode.title)
+          .select("*");
+
+        if (error) console.log(error);
+
+        if (data) {
+          console.log(data);
+        }
       }
-      setFavouriteData([...favouriteData, episodeToAdd])
-    } 
-  }
+
+      useLoadingStore.setState({ loading: false });
+    } catch (error) {
+      console.log(error);
+      useLoadingStore.setState({ loading: false });
+    }
+  };
 
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
@@ -54,7 +91,7 @@ const EpisodeListComp = ({ episode }) => {
     setDuration(audioRef.current?.duration);
   };
 
-  const handleSliderChange = (event, newValue) => {
+  const handleSliderChange = (newValue) => {
     audioRef.current.currentTime = newValue;
     setCurrentTime(newValue);
   };
@@ -126,7 +163,9 @@ const EpisodeListComp = ({ episode }) => {
           }}
         />
 
-        <TinyText>{formatTime(duration - currentTime)}</TinyText>
+        <TinyText>
+          <span>{formatTime(duration - currentTime)}</span>
+        </TinyText>
       </div>
       {isPlaying && (
         <audio
