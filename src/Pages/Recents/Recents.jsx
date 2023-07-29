@@ -1,35 +1,138 @@
+import { useState, useRef } from "react";
+import useRecentStore from "../../Model/useRecentStore";
 import Button from "@mui/material/Button";
+import Slider from "@mui/material/Slider";
+import { styled, Typography } from "@mui/material";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 
+const TinyText = styled(Typography)({
+  fontSize: "0.75rem",
+  opacity: 0.8,
+  fontWeight: 500,
+  letterSpacing: 0.2,
+  paddingLeft: "1rem",
+});
 
 const Recents = () => {
+  const recentEpisodes = useRecentStore((state) => state.recentEpisodes);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef(null);
 
   const handleClearRecentEpisodes = () => {
-
+    useRecentStore.getState().clearRecentEpisodes();
   };
 
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+    if (!isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  };
 
+  const handleTimeUpdate = () => {
+    setCurrentTime(audioRef.current.currentTime);
+  };
 
+  const handleLoadedMetadata = () => {
+    setDuration(audioRef.current?.duration);
+  };
+
+  const handleSliderChange = (newValue) => {
+    audioRef.current.currentTime = newValue;
+    setCurrentTime(newValue);
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  if (!recentEpisodes) {
+    return <div className="mt-16">Loading...</div>
+  }
 
   return (
-    <div className="mt-16">
-      <h3>Recently listened to:</h3>
-      {recentEpisodes.length > 0 ? (
-        <p>No recently listened episodes yet.</p>
+    <div className="mt-16 mb-16">
+      <h2 className="text-lg px-2 py-1 font-bold">Recently listened to:</h2>
+      {recentEpisodes.length === 0 ? (
+        <p className="text-xs px-1.5 pb-1">No recently listened episodes yet.</p>
       ) : (
-        <div>
-          <Button variant="contained" onClick={handleClearRecentEpisodes}>
+        <div className="mt-2">
+          <Button variant="contained" sx={{ marginLeft: '10px', }} onClick={handleClearRecentEpisodes}>
             Reset All Progress
           </Button>
-          {recentEpisodes.map((episode) => (
+          {recentEpisodes.map(({episode, timestamp}) => (
             <div
-            key={episode.title}
-            className="max-w-screen min-h-48 bg-gray-300 mx-2 mb-2 rounded-lg"
-          >
-            <h4 className="text-sm px-1.5 py-1 font-bold">
-              {episode.title}
-            </h4>
-            <p className="text-xs px-1.5 pb-1">{episode.description}</p>
-          </div>
+              key={episode.title}
+              className="mt-4 max-w-screen min-h-48 bg-gray-300 mx-2 mb-2 rounded-lg"
+            >
+              <h4 className="text-sm px-1.5 py-1 font-bold">{episode.title}</h4>
+              <p className="text-xs px-1.5 pb-1">Episode {episode.episode}</p>
+              <p className="text-xs px-1.5 pb-1">{episode.description}</p>
+              <p className="text-xs px-1.5 pb-1">
+                Added on: {new Date(timestamp).toLocaleString()}
+              </p>
+
+              <div className="flex flex-row items-center justify-center">
+                <Button>
+                  {isPlaying ? (
+                    <PauseCircleIcon
+                      className="nav-icon"
+                      onClick={togglePlayPause}
+                    />
+                  ) : (
+                    <PlayCircleIcon
+                      className="nav-icon"
+                      onClick={togglePlayPause}
+                    />
+                  )}
+                </Button>
+
+                <Slider
+                  aria-label="time-indicator"
+                  size="small"
+                  value={currentTime}
+                  min={0}
+                  max={duration}
+                  onChange={handleSliderChange}
+                  sx={{
+                    width: 200,
+                    height: 4,
+                    "& .MuiSlider-thumb": {
+                      width: 8,
+                      height: 8,
+                      transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
+                      "&:before": {
+                        boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
+                      },
+                      "&.Mui-active": {
+                        width: 20,
+                        height: 20,
+                      },
+                    },
+                    "& .MuiSlider-rail": {
+                      opacity: 0.28,
+                    },
+                  }}
+                />
+
+                <TinyText>{formatTime(duration - currentTime)}</TinyText>
+              </div>
+
+              <audio
+                src={episode.file}
+                ref={audioRef}
+                onTimeUpdate={handleTimeUpdate}
+                onEnded={() => setIsPlaying(false)}
+                onLoadedMetadata={handleLoadedMetadata}
+              />
+            </div>
           ))}
         </div>
       )}

@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "../../Config/supabase";
 import { useAuth } from "../../Hooks/useAuth";
-// import useLoadingStore from "../../Model/useStore";
 import Button from "@mui/material/Button";
 import Slider from "@mui/material/Slider";
 import { styled, Typography } from "@mui/material";
@@ -11,6 +10,7 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PropTypes from "prop-types";
 import EpisodePopup from "./EpisodePopup";
+import useRecentStore from "../../Model/useRecentStore";
 
 const TinyText = styled(Typography)({
   fontSize: "0.75rem",
@@ -28,12 +28,51 @@ const EpisodeListComp = ({ episode }) => {
   const audioRef = useRef(null);
   const { user } = useAuth();
   const [favouriteEpisode, setFavouriteEpisode] = useState([]);
+  const recentEpisodes = useRecentStore((state) => state.recentEpisodes);
+
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+    setShowPopup(true);
+    if (!isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+
+    if (!isPlaying && !recentEpisodes.some((e) => e.title === episode.title)) {
+      useRecentStore.getState().addToRecentEpisodes(episode);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    setCurrentTime(audioRef.current.currentTime);
+  };
+
+  const handleLoadedMetadata = () => {
+    setDuration(audioRef.current.duration);
+  };
+
+  const handleSliderChange = (newValue) => {
+    audioRef.current.currentTime = newValue;
+    setCurrentTime(newValue);
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+    setIsPlaying(false);
+  };
 
   useEffect(() => {
-    fetchEpisodes();
+    fetchFavEpisodes();
   }, []);
 
-  const fetchEpisodes = async () => {
+  const fetchFavEpisodes = async () => {
     try {
       const { data, error } = await supabase.from("favouriteEpisodes").select();
 
@@ -45,10 +84,6 @@ const EpisodeListComp = ({ episode }) => {
       console.log("fetching from EpisodeListComp: ", error.message);
     }
   };
-
-  /**
-   * Figure out if favouriteEpisode can be used as context to use all over website
-   */
 
   const isEpisodeInFavourite = favouriteEpisode.some(
     (favEpisode) => favEpisode.title === episode.title
@@ -90,41 +125,6 @@ const EpisodeListComp = ({ episode }) => {
     }
   };
 
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-    setShowPopup(true);
-    if (isPlaying === true) {
-      audioRef.current.play();
-    } else {
-      audioRef.current.pause();
-    }
-  };
-
-  const handleTimeUpdate = () => {
-    setCurrentTime(audioRef.current.currentTime);
-  };
-
-  const handleLoadedMetadata = () => {
-    setDuration(audioRef.current?.duration);
-  };
-
-  const handleSliderChange = (newValue) => {
-    audioRef.current.currentTime = newValue;
-    setCurrentTime(newValue);
-  };
-
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
-
-  const handlePopupClose = () => {
-    setShowPopup(false);
-    setIsPlaying(false);
-    audioRef.current.pause();
-  };
-
   return (
     <div
       key={episode.title}
@@ -139,11 +139,7 @@ const EpisodeListComp = ({ episode }) => {
           Add to favourites
         </Button>
       ) : (
-        <Button
-          variant="text"
-          size="small"
-          onClick={removeFromFavourites}
-        >
+        <Button variant="text" size="small" onClick={removeFromFavourites}>
           <StarIcon />
           Remove from favourites
         </Button>
@@ -162,6 +158,7 @@ const EpisodeListComp = ({ episode }) => {
           aria-label="time-indicator"
           size="small"
           value={currentTime}
+          min={0}
           max={duration}
           onChange={handleSliderChange}
           sx={{
@@ -223,9 +220,4 @@ EpisodeListComp.propTypes = {
   episode: PropTypes.object,
 };
 
-export default EpisodeListComp;
-
-/**
- * BUGS TO FIX:
- * to play again at exact point after pausing
- */
+export default EpisodeListComp; 

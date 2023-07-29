@@ -61,7 +61,7 @@ const Favourites = () => {
 
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
-    if (isPlaying === true) {
+    if (!isPlaying) {
       audioRef.current.play();
     } else {
       audioRef.current.pause();
@@ -130,8 +130,7 @@ const Favourites = () => {
               {favouriteEpisode.map((episode) => (
                 <div
                   key={episode.user_id}
-                  className="max-w-screen min-h-48 bg-gray-300 mx-2 mb-2 rounded-lg"
-                >
+                  className="max-w-screen min-h-48 bg-gray-300 mx-2 mb-2 rounded-lg">
                   <h4 className="text-sm px-1.5 py-1 font-bold">
                     {episode.title}
                   </h4>
@@ -171,6 +170,7 @@ const Favourites = () => {
                       aria-label="time-indicator"
                       size="small"
                       value={currentTime}
+                      min={0}
                       max={duration}
                       onChange={handleSliderChange}
                       sx={{
