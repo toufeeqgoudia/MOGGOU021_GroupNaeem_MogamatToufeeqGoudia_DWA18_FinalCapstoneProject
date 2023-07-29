@@ -21,9 +21,9 @@ const SearchFavs = ({ favouriteData, onSearchResults }) => {
     } else if (sort === "za") {
       results.sort((a, b) => b.title.localeCompare(a.title));
     } else if (sort === "dateAsc") {
-      results.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      results.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
     } else if (sort === "dateDesc") {
-      results.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      results.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     }
 
     if (!sort) {

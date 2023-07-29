@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { supabase } from "../../Config/supabase";
-import useLoadingStore from "../../Model/useStore";
+import { useAuth } from "../../Hooks/useAuth";
+// import useLoadingStore from "../../Model/useStore";
 import Button from "@mui/material/Button";
 import Slider from "@mui/material/Slider";
 import { styled, Typography } from "@mui/material";
@@ -25,62 +26,78 @@ const EpisodeListComp = ({ episode }) => {
   const [duration, setDuration] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const audioRef = useRef(null);
+  const { user } = useAuth();
   const [favouriteEpisode, setFavouriteEpisode] = useState([]);
 
+  useEffect(() => {
+    fetchEpisodes();
+  }, []);
+
+  const fetchEpisodes = async () => {
+    try {
+      const { data, error } = await supabase.from("favouriteEpisodes").select();
+
+      if (error) throw error;
+      if (data) {
+        setFavouriteEpisode(data);
+      }
+    } catch (error) {
+      console.log("fetching from EpisodeListComp: ", error.message);
+    }
+  };
+
   /**
-   * FIX REMOVE FROM FAVOURITES
+   * Figure out if favouriteEpisode can be used as context to use all over website
    */
-  const isEpisodeInFavourites = favouriteEpisode.some(
+
+  const isEpisodeInFavourite = favouriteEpisode.some(
     (favEpisode) => favEpisode.title === episode.title
   );
 
   const addToFavourites = async () => {
-    try {
-      useLoadingStore.setState({ loading: true });
-
-      if (!isEpisodeInFavourites) {
-        const { data, error } = await supabase
-          .from("favouriteEpisodes")
-          .insert({
-            title: episode.title,
-            description: episode.description,
-            episode: episode.episode,
-            file: episode.file,
-          })
-          .select("*");
+    if (!isEpisodeInFavourite) {
+      try {
+        const { error } = await supabase.from("favouriteEpisodes").insert({
+          id: user.id,
+          title: episode.title,
+          description: episode.description,
+          episode: episode.episode,
+          file: episode.file,
+          created_at: episode.created_at,
+        });
 
         if (error) {
-          console.log(error);
-          return;
+          console.log("Could not save episode to favourites", error);
         }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
-        if (data) {
-          setFavouriteEpisode(data);
-        }
-      } else if (isEpisodeInFavourites) {
-        const { data, error } = await supabase
+  const removeFromFavourites = async () => {
+    if (isEpisodeInFavourite) {
+      try {
+        const { error } = await supabase
           .from("favouriteEpisodes")
           .delete()
-          .eq("title", episode.title)
-          .select("*");
+          .eq("title", episode.title);
 
-        if (error) console.log(error);
-
-        if (data) {
-          console.log(data);
-        }
+        if (error) throw error;
+      } catch (error) {
+        console.log("deleting from EpisodeListComp: ", error.message);
       }
-
-      useLoadingStore.setState({ loading: false });
-    } catch (error) {
-      console.log(error);
-      useLoadingStore.setState({ loading: false });
     }
   };
 
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
     setShowPopup(true);
+    if (isPlaying === true) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
   };
 
   const handleTimeUpdate = () => {
@@ -105,6 +122,7 @@ const EpisodeListComp = ({ episode }) => {
   const handlePopupClose = () => {
     setShowPopup(false);
     setIsPlaying(false);
+    audioRef.current.pause();
   };
 
   return (
@@ -115,15 +133,19 @@ const EpisodeListComp = ({ episode }) => {
       <h4 className="text-sm px-1.5 py-1 font-bold">{episode.title}</h4>
       <p className="text-xs px-1.5 pb-1">{episode.description}</p>
 
-      {isEpisodeInFavourites ? (
-        <Button variant="text" size="small" onClick={addToFavourites}>
-          <StarIcon />
-          Remove from favourites
-        </Button>
-      ) : (
+      {!isEpisodeInFavourite ? (
         <Button variant="text" size="small" onClick={addToFavourites}>
           <StarBorderIcon />
           Add to favourites
+        </Button>
+      ) : (
+        <Button
+          variant="text"
+          size="small"
+          onClick={removeFromFavourites}
+        >
+          <StarIcon />
+          Remove from favourites
         </Button>
       )}
 
@@ -171,7 +193,6 @@ const EpisodeListComp = ({ episode }) => {
         <audio
           src={episode.file}
           ref={audioRef}
-          autoPlay
           onTimeUpdate={handleTimeUpdate}
           onEnded={() => setIsPlaying(false)}
           onLoadedMetadata={handleLoadedMetadata}

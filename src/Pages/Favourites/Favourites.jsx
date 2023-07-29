@@ -1,46 +1,95 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { supabase } from "../../Config/supabase";
 import Button from "@mui/material/Button";
 import StarIcon from "@mui/icons-material/Star";
 import SearchFavs from "../../Components/SearchShows/SearchFavs";
+import Slider from "@mui/material/Slider";
+import { styled, Typography } from "@mui/material";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
+import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+
+const TinyText = styled(Typography)({
+  fontSize: "0.75rem",
+  opacity: 0.8,
+  fontWeight: 500,
+  letterSpacing: 0.2,
+  paddingLeft: "1rem",
+});
 
 const Favourites = () => {
   const [favouriteEpisode, setFavouriteEpisode] = useState([]);
-  const [fetchError, setFetchError] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef(null);
 
   useEffect(() => {
-    const fetchEpisodes = async () => {
-      const { data, error } = await supabase
-        .from("favouriteEpisodes")
-        .select("*");
-
-      if (error) {
-        setFetchError("Failed to fetch favourite episodes");
-      }
-      if (data) {
-        setFavouriteEpisode(data);
-        setFetchError("");
-      }
-
-      console.log("data: ", data);
-    };
-
     fetchEpisodes();
   }, []);
 
-  const handleRemoveFromFavourites = () => {
-    console.log("hello");
+  const fetchEpisodes = async () => {
+    try {
+      const { data, error } = await supabase.from("favouriteEpisodes").select();
+
+      if (error) throw error;
+      if (data) {
+        setFavouriteEpisode(data);
+      }
+    } catch (error) {
+      console.log('fetching from Favourites: ', error.message)
+    }
+  };
+
+  const handleRemoveFromFavourites = async (episodeTitle) => {
+    try {
+      const { error } = await supabase
+        .from("favouriteEpisodes")
+        .delete()
+        .eq("title", episodeTitle);
+
+      if (error) throw error;
+      window.location.reload()
+    } catch (error) {
+      console.log("deleting from Favourites: ", error.message);
+    }
   };
 
   const handleSearchResults = (results) => {
     setSearchResults(results);
   };
 
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+    if (isPlaying === true) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    setCurrentTime(audioRef.current.currentTime);
+  };
+
+  const handleLoadedMetadata = () => {
+    setDuration(audioRef.current?.duration);
+  };
+
+  const handleSliderChange = (newValue) => {
+    audioRef.current.currentTime = newValue;
+    setCurrentTime(newValue);
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
   return (
     <div className="mt-14">
       <h2 className="text-lg px-2 py-1 font-bold">Favourite Episodes</h2>
-      {fetchError && <p>{fetchError}</p>}
       {favouriteEpisode.length === 0 ? (
         <p className="text-sm px-2 py-1">No favourite episodes yet.</p>
       ) : (
@@ -62,13 +111,13 @@ const Favourites = () => {
                   </h4>
                   <p className="text-xs px-1.5 pb-1">{episode.description}</p>
                   <p className="text-xs px-1.5 pb-1">
-                    Added on: {new Date(episode.timestamp).toLocaleString()}
+                    Added on: {new Date(episode.created_at).toLocaleString()}
                   </p>
 
                   <Button
                     variant="text"
                     size="small"
-                    onClick={() => handleRemoveFromFavourites(episode)}
+                    onClick={() => handleRemoveFromFavourites(episode.title)}
                   >
                     <StarIcon />
                     Remove from favourites
@@ -97,13 +146,64 @@ const Favourites = () => {
                   <Button
                     variant="text"
                     size="small"
-                    onClick={() => handleRemoveFromFavourites(episode)}
+                    onClick={() => handleRemoveFromFavourites(episode.title)}
                   >
                     <StarIcon />
                     Remove from favourites
                   </Button>
 
-                  <audio src={episode.file} />
+                  <div className="flex flex-row items-center justify-center">
+                    <Button>
+                      {isPlaying ? (
+                        <PauseCircleIcon
+                          className="nav-icon"
+                          onClick={togglePlayPause}
+                        />
+                      ) : (
+                        <PlayCircleIcon
+                          className="nav-icon"
+                          onClick={togglePlayPause}
+                        />
+                      )}
+                    </Button>
+
+                    <Slider
+                      aria-label="time-indicator"
+                      size="small"
+                      value={currentTime}
+                      max={duration}
+                      onChange={handleSliderChange}
+                      sx={{
+                        width: 200,
+                        height: 4,
+                        "& .MuiSlider-thumb": {
+                          width: 8,
+                          height: 8,
+                          transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
+                          "&:before": {
+                            boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
+                          },
+                          "&.Mui-active": {
+                            width: 20,
+                            height: 20,
+                          },
+                        },
+                        "& .MuiSlider-rail": {
+                          opacity: 0.28,
+                        },
+                      }}
+                    />
+
+                    <TinyText>{formatTime(duration - currentTime)}</TinyText>
+                  </div>
+
+                  <audio
+                    src={episode.file}
+                    ref={audioRef}
+                    onTimeUpdate={handleTimeUpdate}
+                    onEnded={() => setIsPlaying(false)}
+                    onLoadedMetadata={handleLoadedMetadata}
+                  />
                 </div>
               ))}
             </div>
