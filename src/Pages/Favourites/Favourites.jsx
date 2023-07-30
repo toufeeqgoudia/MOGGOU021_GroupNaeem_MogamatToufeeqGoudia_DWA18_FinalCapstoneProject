@@ -7,6 +7,7 @@ import Slider from "@mui/material/Slider";
 import { styled, Typography } from "@mui/material";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+import { usePlayer } from "../../Hooks/usePlayer";
 
 const TinyText = styled(Typography)({
   fontSize: "0.75rem",
@@ -17,6 +18,7 @@ const TinyText = styled(Typography)({
 });
 
 const Favourites = () => {
+  const { setCurrentEpisode } = usePlayer()
   const [favouriteEpisode, setFavouriteEpisode] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -37,7 +39,7 @@ const Favourites = () => {
         setFavouriteEpisode(data);
       }
     } catch (error) {
-      console.log('fetching from Favourites: ', error.message)
+      console.log("fetching from Favourites: ", error.message);
     }
   };
 
@@ -49,7 +51,7 @@ const Favourites = () => {
         .eq("title", episodeTitle);
 
       if (error) throw error;
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
       console.log("deleting from Favourites: ", error.message);
     }
@@ -62,14 +64,16 @@ const Favourites = () => {
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
     if (!isPlaying) {
-      audioRef.current.play();
+      audioRef.current?.play();
     } else {
-      audioRef.current.pause();
+      audioRef.current?.pause();
     }
+
+    setCurrentEpisode(isPlaying ? null : favouriteEpisode.map((episode) => episode))
   };
 
   const handleTimeUpdate = () => {
-    setCurrentTime(audioRef.current.currentTime);
+    setCurrentTime(audioRef.current?.currentTime);
   };
 
   const handleLoadedMetadata = () => {
@@ -88,7 +92,7 @@ const Favourites = () => {
   };
 
   return (
-    <div className="mt-14">
+    <div className="mt-14 mb-32">
       <h2 className="text-lg px-2 py-1 font-bold">Favourite Episodes</h2>
       {favouriteEpisode.length === 0 ? (
         <p className="text-sm px-2 py-1">No favourite episodes yet.</p>
@@ -130,7 +134,8 @@ const Favourites = () => {
               {favouriteEpisode.map((episode) => (
                 <div
                   key={episode.user_id}
-                  className="max-w-screen min-h-48 bg-gray-300 mx-2 mb-2 rounded-lg">
+                  className="max-w-screen min-h-48 bg-gray-300 mx-2 mb-2 rounded-lg"
+                >
                   <h4 className="text-sm px-1.5 py-1 font-bold">
                     {episode.title}
                   </h4>
@@ -152,17 +157,11 @@ const Favourites = () => {
                   </Button>
 
                   <div className="flex flex-row items-center justify-center">
-                    <Button>
+                    <Button onClick={() => togglePlayPause(episode.title)}>
                       {isPlaying ? (
-                        <PauseCircleIcon
-                          className="nav-icon"
-                          onClick={togglePlayPause}
-                        />
+                        <PauseCircleIcon className="nav-icon" />
                       ) : (
-                        <PlayCircleIcon
-                          className="nav-icon"
-                          onClick={togglePlayPause}
-                        />
+                        <PlayCircleIcon className="nav-icon" />
                       )}
                     </Button>
 

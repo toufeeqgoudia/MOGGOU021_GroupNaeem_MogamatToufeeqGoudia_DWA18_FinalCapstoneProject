@@ -1,6 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
+import { PlayerProvider } from '../../Context/PlayerProvider';
 import TopNav from '../../Components/Nav/TopNav';
 import BottomNav from '../../Components/Nav/BottomNav';
+import EpisodePlayer from '../../Components/Nav/EpisodePlayer';
 import ShowList from '../../Components/ShowList/ShowList';
 import EpisodeList from '../../Components/EpisodeList/EpisodeList'
 import Favourites from '../Favourites/Favourites';
@@ -8,7 +10,7 @@ import Recents from '../Recents/Recents';
 
 const Home = () => {
   return (
-    <>
+    <PlayerProvider>
       <TopNav />
       <Routes>
         <Route path="/" element={<ShowList />} />
@@ -16,8 +18,9 @@ const Home = () => {
         <Route path="/favourites" element={<Favourites />} />
         <Route path="/recents" element={<Recents />} />
       </Routes>
+      <EpisodePlayer />
       <BottomNav />
-    </>
+    </PlayerProvider>
   );
 }
 

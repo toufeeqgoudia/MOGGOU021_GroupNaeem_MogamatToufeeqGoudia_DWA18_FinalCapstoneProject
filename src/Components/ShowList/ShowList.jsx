@@ -52,7 +52,7 @@ const ShowList = () => {
           <SearchShows shows={shows} onSearchResults={handleSearchResults} />
 
           {searchResults.length > 0 ? (
-            <div className="mt-10 max-w-screen flex flex-wrap justify-between">
+            <div className="mt-10 mb-32 max-w-screen flex flex-wrap justify-between">
               {searchResults.map((show) => (
                 <div
                   key={show.id}
@@ -90,7 +90,7 @@ const ShowList = () => {
             <>
               <DiscoverList shows={shows} />
               <h1 className="mt-10 ml-3">All Shows: </h1>
-              <div className="mt-5 max-w-screen flex flex-wrap justify-between">
+              <div className="mt-5 mb-32 max-w-screen flex flex-wrap justify-between">
                 {shows.length > 0 &&
                   shows.map((show) => (
                     <div

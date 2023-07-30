@@ -4,7 +4,7 @@ const useRecentStore = create((set) => ({
   recentEpisodes: [],
   setRecentEpisodes: (data) => {
     set({ recentEpisodes: data });
-    localStorage.setItem('recentEpisode', JSON.stringify(data));
+    localStorage.setItem("recentEpisodes", JSON.stringify(data));
   },
   addToRecentEpisodes: (episode) => {
     set((state) => {
@@ -28,5 +28,13 @@ const useRecentStore = create((set) => ({
     localStorage.removeItem('recentEpisode');
   },
 }));
+
+const initialRecentData = localStorage.getItem("recentEpisode");
+
+if (initialRecentData) {
+  useRecentStore.setState({
+    favouriteData: JSON.parse(initialRecentData),
+  });
+}
 
 export default useRecentStore

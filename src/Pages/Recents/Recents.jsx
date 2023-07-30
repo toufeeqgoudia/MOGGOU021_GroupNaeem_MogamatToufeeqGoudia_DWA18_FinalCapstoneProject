@@ -5,6 +5,7 @@ import Slider from "@mui/material/Slider";
 import { styled, Typography } from "@mui/material";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
+import { usePlayer } from "../../Hooks/usePlayer";
 
 const TinyText = styled(Typography)({
   fontSize: "0.75rem",
@@ -15,6 +16,7 @@ const TinyText = styled(Typography)({
 });
 
 const Recents = () => {
+  const { setCurrentEpisode } = usePlayer()
   const recentEpisodes = useRecentStore((state) => state.recentEpisodes);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -28,14 +30,16 @@ const Recents = () => {
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
     if (!isPlaying) {
-      audioRef.current.play();
+      audioRef.current?.play();
     } else {
-      audioRef.current.pause();
+      audioRef.current?.pause();
     }
+
+    setCurrentEpisode(isPlaying ? null : recentEpisodes.map((episode) => episode))
   };
 
   const handleTimeUpdate = () => {
-    setCurrentTime(audioRef.current.currentTime);
+    setCurrentTime(audioRef.current?.currentTime);
   };
 
   const handleLoadedMetadata = () => {
@@ -54,20 +58,24 @@ const Recents = () => {
   };
 
   if (!recentEpisodes) {
-    return <div className="mt-16">Loading...</div>
+    return <div className="mt-16">Loading...</div>;
   }
 
   return (
-    <div className="mt-16 mb-16">
+    <div className="mt-14 mb-32">
       <h2 className="text-lg px-2 py-1 font-bold">Recently listened to:</h2>
       {recentEpisodes.length === 0 ? (
-        <p className="text-xs px-1.5 pb-1">No recently listened episodes yet.</p>
+        <p className="text-sm px-2 py-1">No recently listened episodes yet.</p>
       ) : (
         <div className="mt-2">
-          <Button variant="contained" sx={{ marginLeft: '10px', }} onClick={handleClearRecentEpisodes}>
+          <Button
+            variant="contained"
+            sx={{ marginLeft: "10px" }}
+            onClick={handleClearRecentEpisodes}
+          >
             Reset All Progress
           </Button>
-          {recentEpisodes.map(({episode, timestamp}) => (
+          {recentEpisodes.map(({ episode, timestamp }) => (
             <div
               key={episode.title}
               className="mt-4 max-w-screen min-h-48 bg-gray-300 mx-2 mb-2 rounded-lg"
@@ -80,17 +88,11 @@ const Recents = () => {
               </p>
 
               <div className="flex flex-row items-center justify-center">
-                <Button>
+                <Button onClick={() => togglePlayPause()}>
                   {isPlaying ? (
-                    <PauseCircleIcon
-                      className="nav-icon"
-                      onClick={togglePlayPause}
-                    />
+                    <PauseCircleIcon className="nav-icon" />
                   ) : (
-                    <PlayCircleIcon
-                      className="nav-icon"
-                      onClick={togglePlayPause}
-                    />
+                    <PlayCircleIcon className="nav-icon" />
                   )}
                 </Button>
 

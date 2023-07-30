@@ -23,7 +23,7 @@ const EpisodeList = () => {
   };
 
   return (
-    <div className="my-10 max-w-screen">
+    <div className="mt-14 mb-32 max-w-screen">
       <div className="flex w-full h-1/2 justify-evenly items-center">
         <img
           src={showDetails.image}

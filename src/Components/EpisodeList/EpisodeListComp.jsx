@@ -9,8 +9,8 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PropTypes from "prop-types";
-import EpisodePopup from "./EpisodePopup";
 import useRecentStore from "../../Model/useRecentStore";
+import { usePlayer } from "../../Hooks/usePlayer";
 
 const TinyText = styled(Typography)({
   fontSize: "0.75rem",
@@ -21,10 +21,9 @@ const TinyText = styled(Typography)({
 });
 
 const EpisodeListComp = ({ episode }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const { setCurrentEpisode, isPlaying, setIsPlaying } = usePlayer();
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [showPopup, setShowPopup] = useState(false);
   const audioRef = useRef(null);
   const { user } = useAuth();
   const [favouriteEpisode, setFavouriteEpisode] = useState([]);
@@ -32,11 +31,15 @@ const EpisodeListComp = ({ episode }) => {
 
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
-    setShowPopup(true);
+
     if (!isPlaying) {
-      audioRef.current.play();
+      audioRef.current?.play();
     } else {
-      audioRef.current.pause();
+      audioRef.current?.pause();
+    }
+
+    if (!isPlaying) {
+      setCurrentEpisode(episode)
     }
 
     if (!isPlaying && !recentEpisodes.some((e) => e.title === episode.title)) {
@@ -45,11 +48,11 @@ const EpisodeListComp = ({ episode }) => {
   };
 
   const handleTimeUpdate = () => {
-    setCurrentTime(audioRef.current.currentTime);
+    setCurrentTime(audioRef.current?.currentTime);
   };
 
   const handleLoadedMetadata = () => {
-    setDuration(audioRef.current.duration);
+    setDuration(audioRef.current?.duration);
   };
 
   const handleSliderChange = (newValue) => {
@@ -61,11 +64,6 @@ const EpisodeListComp = ({ episode }) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
-
-  const handlePopupClose = () => {
-    setShowPopup(false);
-    setIsPlaying(false);
   };
 
   useEffect(() => {
@@ -146,11 +144,11 @@ const EpisodeListComp = ({ episode }) => {
       )}
 
       <div className="flex flex-row items-center justify-center">
-        <Button onClick={togglePlayPause}>
+        <Button onClick={() => togglePlayPause(episode.user_id)}>
           {isPlaying ? (
-            <PauseCircleIcon className="nav-icon" onClick={togglePlayPause} />
+            <PauseCircleIcon className="nav-icon" />
           ) : (
-            <PlayCircleIcon className="nav-icon" onClick={togglePlayPause} />
+            <PlayCircleIcon className="nav-icon" />
           )}
         </Button>
 
@@ -158,7 +156,6 @@ const EpisodeListComp = ({ episode }) => {
           aria-label="time-indicator"
           size="small"
           value={currentTime}
-          min={0}
           max={duration}
           onChange={handleSliderChange}
           sx={{
@@ -186,7 +183,7 @@ const EpisodeListComp = ({ episode }) => {
           <span>{formatTime(duration - currentTime)}</span>
         </TinyText>
       </div>
-      {isPlaying && (
+
         <audio
           src={episode.file}
           ref={audioRef}
@@ -194,24 +191,7 @@ const EpisodeListComp = ({ episode }) => {
           onEnded={() => setIsPlaying(false)}
           onLoadedMetadata={handleLoadedMetadata}
         />
-      )}
-
-      {showPopup && (
-        <EpisodePopup
-          onClose={handlePopupClose}
-          isPlaying={isPlaying}
-          currentTime={currentTime}
-          duration={duration}
-          togglePlayPause={togglePlayPause}
-          handleSliderChange={handleSliderChange}
-          formatTime={formatTime}
-          episode={episode}
-          audioRef={audioRef}
-          handleTimeUpdate={handleTimeUpdate}
-          onEnded={() => setIsPlaying(false)}
-          handleLoadedMetadata={handleLoadedMetadata}
-        />
-      )}
+  
     </div>
   );
 };
@@ -220,4 +200,4 @@ EpisodeListComp.propTypes = {
   episode: PropTypes.object,
 };
 
-export default EpisodeListComp; 
+export default EpisodeListComp;
