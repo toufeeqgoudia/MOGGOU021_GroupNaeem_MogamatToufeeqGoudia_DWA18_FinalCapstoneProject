@@ -21,7 +21,8 @@ const TinyText = styled(Typography)({
 });
 
 const EpisodeListComp = ({ episode }) => {
-  const { setCurrentEpisode, isPlaying, setIsPlaying } = usePlayer();
+  const { setCurrentEpisode } = usePlayer();
+  const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);

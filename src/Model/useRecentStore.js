@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 const useRecentStore = create((set) => ({
-  recentEpisodes: [],
+  recentEpisodes: JSON.parse(localStorage.getItem("recentEpisodes") || []),
   setRecentEpisodes: (data) => {
     set({ recentEpisodes: data });
     localStorage.setItem("recentEpisodes", JSON.stringify(data));

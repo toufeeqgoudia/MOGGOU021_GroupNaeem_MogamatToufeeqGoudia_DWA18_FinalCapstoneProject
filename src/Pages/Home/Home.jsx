@@ -7,6 +7,7 @@ import ShowList from '../../Components/ShowList/ShowList';
 import EpisodeList from '../../Components/EpisodeList/EpisodeList'
 import Favourites from '../Favourites/Favourites';
 import Recents from '../Recents/Recents';
+import ConfirmClosePage from '../ConfirmClosePage/ConfirmClosePage'
 
 const Home = () => {
   return (
@@ -20,6 +21,7 @@ const Home = () => {
       </Routes>
       <EpisodePlayer />
       <BottomNav />
+      <ConfirmClosePage />
     </PlayerProvider>
   );
 }

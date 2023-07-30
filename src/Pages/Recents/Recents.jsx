@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import useRecentStore from "../../Model/useRecentStore";
 import Button from "@mui/material/Button";
 import Slider from "@mui/material/Slider";
@@ -22,6 +22,10 @@ const Recents = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    useRecentStore.getState().setRecentEpisodes(recentEpisodes);
+  }, [recentEpisodes]);
 
   const handleClearRecentEpisodes = () => {
     useRecentStore.getState().clearRecentEpisodes();
@@ -58,7 +62,7 @@ const Recents = () => {
   };
 
   if (!recentEpisodes) {
-    return <div className="mt-16">Loading...</div>;
+    return <div>Loading...</div>;
   }
 
   return (
