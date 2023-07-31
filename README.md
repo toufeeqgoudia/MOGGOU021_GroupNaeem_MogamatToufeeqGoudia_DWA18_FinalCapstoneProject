@@ -1,7 +1,11 @@
 <!-- omit in toc -->
 # PodHub
 
-Welcome to PodHub!
+Welcome to PodHub! This application allows users to easily browse, search and listen to podcasts from the podcast collection. It provides a user-friendly interface and various features to enhance the overall experience. 
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b1dd7a06-ae94-4f59-81cf-19687d02c1e0/deploy-status)](https://app.netlify.com/sites/podhub/deploys)
+
+[PodHub](https://podhub.netlify.app/) 
 
 <!-- omit in toc -->
 ## Table of Contents
