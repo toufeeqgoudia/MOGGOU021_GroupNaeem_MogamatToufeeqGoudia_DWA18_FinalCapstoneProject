@@ -22,6 +22,7 @@ const TinyText = styled(Typography)({
 
 const EpisodeListComp = ({ episode }) => {
   const { setCurrentEpisode, isPlaying, setIsPlaying } = usePlayer();
+  const [currentPlayingEpisode, setCurrentPlayingEpisode] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
@@ -29,22 +30,26 @@ const EpisodeListComp = ({ episode }) => {
   const [favouriteEpisode, setFavouriteEpisode] = useState([]);
   const recentEpisodes = useRecentStore((state) => state.recentEpisodes);
 
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-
-    if (!isPlaying) {
-      audioRef.current?.play();
+  const togglePlayPause = (episode) => {
+    if (currentPlayingEpisode === episode) {
+      setIsPlaying(!isPlaying);
+      if (!isPlaying) {
+        audioRef.current?.play();
+      } else {
+        audioRef.current?.pause();
+      }
     } else {
-      audioRef.current?.pause();
-    }
-
-    if (!isPlaying) {
-      setCurrentEpisode(episode)
+      setCurrentPlayingEpisode(episode);
+      setIsPlaying(true);
+      audioRef.current.src = episode.file;
+      audioRef.current.play();
     }
 
     if (!isPlaying && !recentEpisodes.some((e) => e.title === episode.title)) {
       useRecentStore.getState().addToRecentEpisodes(episode);
     }
+
+    setCurrentEpisode(isPlaying ? null : episode);
   };
 
   const handleTimeUpdate = () => {
@@ -144,18 +149,18 @@ const EpisodeListComp = ({ episode }) => {
       )}
 
       <div className="flex flex-row items-center justify-center">
-        <Button onClick={() => togglePlayPause(episode.user_id)}>
-          {isPlaying ? (
-            <PauseCircleIcon />
+        <Button onClick={() => togglePlayPause(episode)}>
+          {currentPlayingEpisode === episode && isPlaying ? (
+            <PauseCircleIcon className="nav-icon" />
           ) : (
-            <PlayCircleIcon />
+            <PlayCircleIcon className="nav-icon" />
           )}
         </Button>
 
         <Slider
           aria-label="time-indicator"
           size="small"
-          value={currentTime}
+          value={currentPlayingEpisode === episode ? currentTime : 0}
           max={duration}
           onChange={handleSliderChange}
           sx={{
@@ -184,14 +189,14 @@ const EpisodeListComp = ({ episode }) => {
         </TinyText>
       </div>
 
-        <audio
-          src={episode.file}
-          ref={audioRef}
-          onTimeUpdate={handleTimeUpdate}
-          onEnded={() => setIsPlaying(false)}
-          onLoadedMetadata={handleLoadedMetadata}
-        />
-  
+      <audio
+        src={episode.file}
+        ref={audioRef}
+        onTimeUpdate={handleTimeUpdate}
+        onPause={() => setCurrentPlayingEpisode(null)}
+        onEnded={() => setCurrentPlayingEpisode(null)}
+        onLoadedMetadata={handleLoadedMetadata}
+      />
     </div>
   );
 };
