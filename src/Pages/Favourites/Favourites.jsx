@@ -18,10 +18,10 @@ const TinyText = styled(Typography)({
 });
 
 const Favourites = () => {
-  const { setCurrentEpisode } = usePlayer()
+  const { setCurrentEpisode, isPlaying, setIsPlaying } = usePlayer()
   const [favouriteEpisode, setFavouriteEpisode] = useState([]);
+  const [currentPlayingEpisode, setCurrentPlayingEpisode] = useState(null)
   const [searchResults, setSearchResults] = useState([]);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
@@ -61,15 +61,22 @@ const Favourites = () => {
     setSearchResults(results);
   };
 
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-    if (!isPlaying) {
-      audioRef.current?.play();
+  const togglePlayPause = (episode) => {
+    if (currentPlayingEpisode === episode) {
+      setIsPlaying(!isPlaying);
+      if (!isPlaying) {
+        audioRef.current?.play();
+      } else {
+        audioRef.current?.pause();
+      }
     } else {
-      audioRef.current?.pause();
+      setCurrentPlayingEpisode(episode);
+      setIsPlaying(true);
+      audioRef.current.src = episode.file;
+      audioRef.current.play();
     }
 
-    setCurrentEpisode(isPlaying ? null : favouriteEpisode.map((episode) => episode))
+    setCurrentEpisode(isPlaying ? null : episode)
   };
 
   const handleTimeUpdate = () => {
@@ -81,8 +88,10 @@ const Favourites = () => {
   };
 
   const handleSliderChange = (newValue) => {
-    audioRef.current.currentTime = newValue;
-    setCurrentTime(newValue);
+    if (currentPlayingEpisode) {
+      setCurrentTime(newValue);
+      audioRef.current.currentTime = newValue;
+    }
   };
 
   const formatTime = (time) => {
@@ -157,8 +166,8 @@ const Favourites = () => {
                   </Button>
 
                   <div className="flex flex-row items-center justify-center">
-                    <Button onClick={() => togglePlayPause(episode.title)}>
-                      {isPlaying ? (
+                    <Button onClick={() => togglePlayPause(episode)}>
+                      {currentPlayingEpisode === episode && isPlaying ? (
                         <PauseCircleIcon className="nav-icon" />
                       ) : (
                         <PlayCircleIcon className="nav-icon" />
@@ -168,7 +177,7 @@ const Favourites = () => {
                     <Slider
                       aria-label="time-indicator"
                       size="small"
-                      value={currentTime}
+                      value={currentPlayingEpisode === episode ? currentTime : 0}
                       min={0}
                       max={duration}
                       onChange={handleSliderChange}
@@ -200,7 +209,8 @@ const Favourites = () => {
                     src={episode.file}
                     ref={audioRef}
                     onTimeUpdate={handleTimeUpdate}
-                    onEnded={() => setIsPlaying(false)}
+                    onPause={() => setCurrentPlayingEpisode(null)}
+                    onEnded={() => setCurrentPlayingEpisode(null)}
                     onLoadedMetadata={handleLoadedMetadata}
                   />
                 </div>
