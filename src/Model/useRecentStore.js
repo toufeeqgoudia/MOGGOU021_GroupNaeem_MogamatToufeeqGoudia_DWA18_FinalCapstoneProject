@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 const useRecentStore = create((set) => ({
-  recentEpisodes: JSON.parse(localStorage.getItem("recentEpisodes") || []),
+  recentEpisodes: [],
   setRecentEpisodes: (data) => {
     set({ recentEpisodes: data });
     localStorage.setItem("recentEpisodes", JSON.stringify(data));
@@ -25,11 +25,11 @@ const useRecentStore = create((set) => ({
   },
   clearRecentEpisodes: () => {
     set({ recentEpisodes: [] });
-    localStorage.removeItem('recentEpisode');
+    localStorage.removeItem('recentEpisodes');
   },
 }));
 
-const initialRecentData = localStorage.getItem("recentEpisode");
+const initialRecentData = localStorage.getItem("recentEpisodes");
 
 if (initialRecentData) {
   useRecentStore.setState({
