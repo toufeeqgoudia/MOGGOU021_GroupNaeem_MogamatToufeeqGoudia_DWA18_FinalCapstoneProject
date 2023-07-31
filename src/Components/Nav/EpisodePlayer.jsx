@@ -15,8 +15,7 @@ const TinyText = styled(Typography)({
 });
 
 const EpisodePlayer = () => {
-  const { currentEpisode } = usePlayer();
-  const [isPlaying, setIsPlaying] = useState(false)
+  const { currentEpisode, isPlaying, setIsPlaying } = usePlayer();
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
@@ -62,9 +61,9 @@ const EpisodePlayer = () => {
           <div className="flex flex-row items-center justify-center">
             <Button variant="text" onClick={togglePlayPause}>
               {isPlaying ? (
-                <PauseCircleIcon className="nav-icon" />
+                <PauseCircleIcon />
               ) : (
-                <PlayCircleIcon className="nav-icon" />
+                <PlayCircleIcon />
               )}
             </Button>
 

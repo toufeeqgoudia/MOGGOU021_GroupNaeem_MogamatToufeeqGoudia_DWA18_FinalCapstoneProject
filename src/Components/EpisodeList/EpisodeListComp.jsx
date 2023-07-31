@@ -21,8 +21,7 @@ const TinyText = styled(Typography)({
 });
 
 const EpisodeListComp = ({ episode }) => {
-  const { setCurrentEpisode } = usePlayer();
-  const [isPlaying, setIsPlaying] = useState(false)
+  const { setCurrentEpisode, isPlaying, setIsPlaying } = usePlayer();
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
@@ -147,9 +146,9 @@ const EpisodeListComp = ({ episode }) => {
       <div className="flex flex-row items-center justify-center">
         <Button onClick={() => togglePlayPause(episode.user_id)}>
           {isPlaying ? (
-            <PauseCircleIcon className="nav-icon" />
+            <PauseCircleIcon />
           ) : (
-            <PlayCircleIcon className="nav-icon" />
+            <PlayCircleIcon />
           )}
         </Button>
 

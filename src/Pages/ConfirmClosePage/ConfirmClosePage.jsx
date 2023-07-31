@@ -1,11 +1,8 @@
 import { useEffect } from "react";
-import { usePlayer } from "../../Hooks/usePlayer";
 
 const ConfirmClosePage = () => {
-  const { currentEpisode } = usePlayer();
 
   useEffect(() => {
-    if (currentEpisode) {
       const handleBeforeUnload = (event) => {
         event.preventDefault();
         event.returnValue = "";
@@ -16,8 +13,7 @@ const ConfirmClosePage = () => {
       return () => {
         window.removeEventListener("beforeunload", handleBeforeUnload);
       };
-    }
-  }, [currentEpisode]);
+  }, []);
 
   return null;
 };

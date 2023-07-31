@@ -11,6 +11,7 @@ export default {
         '365': '365px',
       },
       maxWidth: {
+        'sc': '70px',
         'cc': '155px',
         '280px': '280px'
       },

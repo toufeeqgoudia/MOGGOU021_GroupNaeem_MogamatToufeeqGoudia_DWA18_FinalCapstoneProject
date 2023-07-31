@@ -33,7 +33,7 @@ const initialRecentData = localStorage.getItem("recentEpisodes");
 
 if (initialRecentData) {
   useRecentStore.setState({
-    favouriteData: JSON.parse(initialRecentData),
+    recentEpisodes: JSON.parse(initialRecentData),
   });
 }
 

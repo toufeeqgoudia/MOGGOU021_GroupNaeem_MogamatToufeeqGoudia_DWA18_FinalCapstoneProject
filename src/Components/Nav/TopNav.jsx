@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../../Config/supabase";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Button from "@mui/material/Button";
@@ -7,6 +8,11 @@ import Divider from "@mui/material/Divider";
 
 const TopNav = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const navigate = useNavigate()
+
+  const backToHome = () => {
+    navigate('/')
+  }
 
   const handleDialog = () => {
     setDialogOpen(!dialogOpen);
@@ -19,13 +25,13 @@ const TopNav = () => {
 
   return (
     <nav className="fixed max-w-screen -top-0 -right-0 -left-0 h-12 flex justify-between items-center shadow-tn z-10 bg-white dark:bg-black">
-      <div className="flex items-center">
+      <div className="w-10 h-10 m-5 rounded-full flex items-center justify-center overflow-hidden cursor-pointer" onClick={backToHome}>
         <img
-          src="/PodHub-nav-logo.png"
+          src="/android-chrome-384x384.png"
           alt="PodHub Logo"
-          className="w-24 h-12 rounded-xl pt-0.5 pb-1 pl-1"
+          className="max-w-sc "
         />
-      </div>
+        </div>
       <div className="m-0">
         <Button onClick={handleDialog}>
           <AccountCircleIcon className="text-xl" />
